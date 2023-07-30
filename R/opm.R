@@ -2,6 +2,9 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
             method=c("Nelder-Mead","BFGS"), hessian=FALSE,
             control=list(),
              ...) {
+  # test for missing functions
+  tmp <- is.null(fn) # will fail if undefined
+  tmp <- is.null(gr) # will fail if undefined, but not if missing from call
   npar <- length(par)
   pstring<-names(par) # the names of the parameters
   npar <- length(par)
@@ -63,23 +66,29 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
         }
       }
   }
+  mti <- method
+  lmth <- length(method)
+  
   method <- unique(method) # in case user has duplicates
-  if (length(method) > 1) {
-       if (control$have.masks) { method <- intersect(method, maskmeth) } # ?? do we want this?
-       else { if (control$have.bounds) { method <- intersect(method,bdmeth) }
-              else { method <- intersect(method, allmeth) }
-       }
-       if ( is.null(hess) ) { # remove snewton and snewtonm when no hessian
-          if ( "snewton" %in% method ) {
-              method <- method[-which(method == "snewton")]
-              warning("'snewton' removed from 'method' -- no hess()")
-          }
-          if ( "snewtonm" %in% method ) {
-              method <- method[-which(method == "snewtonm")]
-              warning("'snewtonm' removed from 'method' -- no hess()")
-          }
-       }
-  }
+  if (length(method) < lmth) warning("Duplicate methods requested -- rendered unique")
+  method <- intersect(method, allmeth)
+  if (length(method) < lmth)warning("Method requested NOT in available set allmeth")
+#  if (length(method) > 1) {
+    if (control$have.bounds) { 
+      method <- intersect(method,bdmeth) 
+      if (length(method) < lmth) warning("method requested does not handle bounds")
+    }
+    if ( is.null(hess) ) { # remove snewton and snewtonm when no hessian
+      if ( "snewton" %in% method ) {
+           method <- method[-which(method == "snewton")]
+           warning("'snewton' removed from 'method' -- no hess()")
+      }
+      if ( "snewtonm" %in% method ) {
+           method <- method[-which(method == "snewtonm")]
+           warning("'snewtonm' removed from 'method' -- no hess()")
+      }
+    }
+#  }
   # 20220221: fixup for methods NOT suitable for bounds
   method <- unlist(method) # ?? needed?
   if (control$have.bounds) method <- method[which(method %in% bdmeth)]

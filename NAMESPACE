@@ -5,6 +5,7 @@ importFrom("nloptr", "nloptr")
 # importFrom("nloptr", "tnewton")
 # importFrom("nloptr", "slsqp")
 importFrom("pracma", "anms")
+importFrom("pracma", "nelder_mead")
 importFrom("utils", "getFromNamespace")
 # importFrom("marqLevAlg", "mla")
 export(

@@ -47,15 +47,15 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
   if (is.null(outmethod)) {
 		if (control$trace > 0) cat("Solver ",method," missing\n")
 		ans<-list() # ans not yet defined, so set as list
-                ans$convergence <- 8888 # failed in run
+    ans$convergence <- 8888 # failed in run
 		ans$value <- control$badval
 		ans$par<-rep(NA,npar)
-                attr(ans$par, "status")<-rep("?",npar)
-	        ans$counts[1] <- NA # save function and gradient count information
-	        ans$counts[2] <- NA # save function and gradient count information
-	        ans$message <- paste("Missing method ",method)
-                ans$hessian <- NULL
-                return(ans) # can't proceed without solver
+    attr(ans$par, "status")<-rep("?",npar)
+	  ans$counts[1] <- NA # save function and gradient count information
+	  ans$counts[2] <- NA # save function and gradient count information
+	  ans$message <- paste("Missing method ",method)
+    ans$hessian <- NULL
+    return(ans) # can't proceed without solver
   }
 
 # Check if bounded
@@ -1421,7 +1421,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
          }
       }  ## end if using tnewton
 ## --------------------------------------------
-  else if (method == "anms") {# Use unconstrained method from marqLevAlg
+  else if (method == "anms") {# Use anms from pracma, Gao-Han adaptive NelderMead 
       if (control$trace > 1) cat("anms\n")
       # Following seems to be needed to avoid unwanted output
       #  if (control$trace < 1) {invisible <- 1} else {invisible <- 0}
@@ -1463,7 +1463,104 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
          }
       }  ## end if using anms
 ## --------------------------------------------
-## END OF optimrx extra methods
+  else if (method == "pracmanm") {# Use nelder_mead from pracma, Gao-Han adaptive NelderMead 
+    if (control$trace > 1) cat("pracmanm\n")
+    # Following seems to be needed to avoid unwanted output
+    #  if (control$trace < 1) {invisible <- 1} else {invisible <- 0}
+    ans <- list() # to define the answer object
+    errmsg <- NA
+    class(ans)[1] <- "undefined" # initial setting
+    ## if(nsctrl > 0) { stop("There are no extra controls set up for ",method) }
+    if (inherits(ans, "undefined")){
+      if (control$have.bounds) {
+        if (control$trace > 0) cat("pracmanm cannot handle bounds\n")
+        errmsg <- "pracmanm cannot handle bounds\n"
+        stop(errmsg)
+        ans <- list()
+        class(ans)[1] <- "try-error"
+      } else {
+        cat("maxfeval=",control$maxfeval,"\n")
+        pnmtol <- 1.0e-08 # default in pracma
+        if (! is.null(mcontrol$pracmanmtol)) pnmtol <- mcontrol$pracmanmtol
+        tans <- try(pracma::nelder_mead(fn=efn, x0=spar, tol=pnmtol, maxfeval=control$maxfeval))
+      }
+    }
+    if (control$trace > 3) {
+        cat("interim answer:")
+        str(tans)
+    }
+    if (! inherits(tans, "try-error")) { ## Need to check these carefully!!?
+      ans$par <- tans$xmin*pscale
+      ans$value <- tans$fmin
+      ans$counts[1] <- tans$count
+      ans$counts[2] <- NA
+      ans$convergence<-0
+      attr(ans$convergence, "restarts") <- tans$info$restarts
+      ans$hessian <- NULL
+      ans$message <- tans$errmess
+      if (tans$count >= control$maxfeval) { ans$convergence <- 1 }
+      tans <- NULL # cleanup
+    } else {
+      if (control$trace>0) cat("pracmanm failed for current problem \n")
+      ans<-list() # ans not yet defined, so set as list
+      ans$value <- control$badval
+      ans$par <- rep(NA,npar)
+      ans$convergence <- 9999 # failed in run
+      ans$counts[1] <- NA
+      ans$counts[2] <- NA # was [1] until 20211122
+      ans$hessian <- NULL
+      if (! is.na(errmsg)) ans$message <- errmsg
+    }
+  }  ## end if using pracmanm
+  ## --------------------------------------------
+  else if (method == "nlnm") {# neldermead from nloptr
+      if (control$trace > 1) cat("nlnm\n")
+      # Following seems to be needed to avoid unwanted output
+      #  if (control$trace < 1) {invisible <- 1} else {invisible <- 0}
+      ans <- list() # to define the answer object
+      errmsg <- NA
+      class(ans)[1] <- "undefined" # initial setting
+      if (inherits(ans, "undefined")){
+         dotstuff<-list(...)
+         if (is.null(dotstuff)) { cat("No ...\n") }
+          maxeval<-control$maxfeval
+          if (length(slower) == 1) slower<-rep(slower, npar)
+          if (length(supper) == 1) supper<-rep(supper, npar)
+          tans <- try(nloptr::neldermead(x0=spar, efn, lower=slower, upper=supper,
+                        control=list(maxeval=maxeval)) )
+      }
+      if (control$trace > 3) {
+        cat("interim answer:")
+        str(tans)
+      }
+      if (! inherits(tans, "try-error")) { ## Need to check these carefully!!?
+          ans$par <- tans$par*pscale
+          ans$value <- tans$value
+          ans$counts[1] <- NA 
+          ans$counts[2] <- tans$iter
+          if (tans$convergence >= 1) { ans$convergence <- 0 }
+          # ?? >1 is supposed to be OK, <0 an error, but 1 not defined.
+          else { if (tans$convergence == 0) {ans$convergence <- 9991 }
+                 else { ans$convergence <- 9999+tans$convergence }
+          if (ans$convergence > 2) { ans$convergence <- 9999 }
+          }
+          if (ans$convergence > 2) ans$convergence <- 9999
+          tans <- NULL # cleanup
+         } else {
+            if (control$trace>0) cat("nlnm failed for current problem \n")
+            ans<-list() # ans not yet defined, so set as list
+            ans$value <- control$badval
+            ans$par <- rep(NA,npar)
+            ans$convergence <- 9999 # failed in run
+            if (is.null(egr)) ans$convergence <- 9998 # no gradient
+            ans$counts[1] <- NA
+            ans$counts[2] <- NA # was [1] until 20211122
+            ans$hessian <- NULL
+            if (! is.na(errmsg)) ans$message <- errmsg
+         }
+      }  ## end if using nlnm (nloptr::neldermead)
+## --------------------------------------------
+  ## END OF optimrx extra methods
 # ---  UNDEFINED METHOD ---
       else { errmsg<-paste("UNDEFINED METHOD:", method, sep='')
              stop(errmsg, call.=FALSE)

@@ -3,8 +3,8 @@ NEWS about R package optimx
 =========== ONGOING CONCERNS =============
 IMMEDIATE WORK TO DO
       o note n/npar in ncg
-      o reltest and offset ?? in ctrldefault
       o snewton/snewtm ?? check
+      o check pracmanm for maximize??
 
 CURRENT BUGS or ISSUES
       o summary.opm should display solution being C(onstrained) or U(nconstrained) and 
@@ -80,6 +80,8 @@ Some comments apply to deprecated packages optimr on CRAN and optimrx on R-forge
 VERSION 2023-06-25
 
       o This is a MAJOR revision and overhaul of the optimx package and its components.
+      o offset removed as control. Use reltest.
+      o opm() does more checks e.g., missing gr, methods inappropriate to problem
       o nvm and Rvmminb: fixed issue that sometimes trystep (distance to bound
         in search direction) came back as small NEGATIVE number) by setting
         any steplength < relstep*.Machine$double.eps to 0. This forces a search

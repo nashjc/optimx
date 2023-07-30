@@ -7,14 +7,14 @@ ctrldefault <- function(npar) {
                 "lbfgsb3c", "Rcgmin", "Rtnmin", "Rvmmin", "snewton", "snewtonm",
                  "spg", "ucminf", "newuoa", "bobyqa", "uobyqa", "nmkb", "hjkb", 
                  "hjn", "lbfgs", "subplex", "ncg", "nvm", "mla", 
-                 "slsqp", "anms", "tnewt")
+                 "slsqp", "tnewt", "anms", "pracmanm", "nlnm")
 
 #  allpkg has package where element of allmeth is found
       allpkg <-  c("stats", "stats", "stats", "stats", "stats", "stats",
                 "lbfgsb3c", "optimx", "optimx", "optimx", "optimx", "optimx",
                 "BB", "ucminf", "minqa", "minqa", "minqa", "dfoptim", "dfoptim", 
                  "optimx", "lbfgs", "subplex", "optimx", "optimx", "marqLevAlg", 
-                 "nloptr", "pracma", "nloptr")
+                 "nloptr", "nloptr", "pracma", "pracma", "nloptr")
 
 ## These are DEFAULTS. They may be nonsense in some contexts.
 
@@ -22,7 +22,21 @@ ctrldefault <- function(npar) {
                 "lbfgsb3c", "Rtnmin", "snewtonm",
                  "spg", "ucminf", "bobyqa", "nmkb", 
                  "subplex", "ncg", "Rcgmin", "nvm", 
-                 "Rvmmin", "mla", "slsqp", "tnewt")
+                 "Rvmmin", "mla", "slsqp", "tnewt",
+                 "pracmanm", "nlnm")
+
+      nogrmeth <- c("Nelder-Mead", "newuoa", "bobyqa", "uobyqa", "nmkb", "hjkb",
+                 "hjn", "subplex", "anms", "pracmanm", "nlnm")
+
+
+      grmeth <- c("BFGS", "CG", "L-BFGS-B", "nlm", "nlminb", 
+                "lbfgsb3c", "Rcgmin", "Rtnmin", "Rvmmin", 
+                 "spg", "ucminf", "lbfgs", "ncg", "nvm", "mla", 
+                 "slsqp", "tnewt")
+
+     hessmeth <- c("nlm", "nlminb", "snewton", "snewtonm")
+
+
 
 #  allpkg has package where element of allmeth is found
 #      mostpkg <-  c("stats", "stats", "stats",
@@ -51,12 +65,11 @@ ctrldefault <- function(npar) {
      #    OKmeth <- allmeth[ - badm ] # leave only packages not 
      #    OKpkg <- allpkg[ OK]
      # }
-     # 160628: uobyqa removed as it fails hobbs from 1,1,1 unscaled
       weakmeth <- c("snewton", "uobyqa")
 
       bdmeth <- c("L-BFGS-B", "nlminb", "lbfgsb3c", "Rcgmin", "Rtnmin", "nvm",  
                 "Rvmmin", "bobyqa", "nmkb", "hjkb", "hjn", "snewtonm", "ncg", 
-                "slsqp", "tnewt")
+                "slsqp", "tnewt", "nlnm")
                  # snewtonmb added 20220210, removed 20230625 for snewtm
 
       bdmeth <- bdmeth[ which(bdmeth %in% OKmeth) ]
@@ -107,12 +120,11 @@ ctrldefault <- function(npar) {
         maxit = 500*round(sqrt(npar+1)), # limit on number of iterations or gradient evaluations
         maxfeval = 5000*round(sqrt(npar+1)), # limit on function evaluations
         mostmeth = mostmeth,
-        offset = 1000.0, # used for equality test (a + offset) == (b + offset)
         parchanged = FALSE, # set TRUE when bounds check has changed parameter values
         # ?? do we want this as a CONTROL? It is returned how??
         parscale = rep(1, npar), # vector of scaling factors for parameters. Try to get
         # scaled parameters to have magnitude in range (1, 10)
-        reltest = 100.0, # see offset. Do we need both??
+        reltest = 100.0, # used for equality test (a + offset) == (b + offset)
         save.failures = TRUE, # ?? where used. optimx() saves failed runs. opm?
       	scaletol = 3, 
         starttests = FALSE, 
