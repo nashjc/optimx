@@ -19,6 +19,9 @@ shows how it may be used to simplify the use of different solvers and to discove
 which ones may be suitable for particular types of problems.
 
 This vignette was written to accompany the 2023 major overhaul of the package.
+However, it should be noted that the package is extensible and solvers and other
+features are being added regularly.
+
 
 ## Background 
 
@@ -32,6 +35,80 @@ and some in CRAN packages such as `nlsr` and `minpack.lm` (@nlsr2023manual,
 @minpacklm12) that 
 will **not** be discussed here except when there is overlap with particular 
 matters at hand.
+
+
+## "Optimization"
+
+The general nonlinear optimization problem considers the minimization or 
+maximization of an objective function subject to equality and inequality
+constraints that are both linear and nonlinear. It comprehends the field
+of mathematical programming, and solution of nonlinear equations overlaps
+many methods.
+
+In R, what is referred to as "optimization", including the original `optim()`
+function and its replacement in this package, only allows for the minimization
+or maximization of nonlinear functions of
+multiple parameters subject to at most bounds constraints. Many methods
+offer extra facilities, but apart from **masks** (fixed parameters), such features are
+likely inaccessible via this package without some customization 
+of the code. Even masks are specified by bounds constraints where the upper and
+lower bounds coincide. This will generally "work" for methods that support 
+bounds constraints, but a few methods explicitly recognize masks and avoid
+extra computational work. Where possible, the solvers supplied as part of `optimx`
+try to be efficient in this way.
+
+For our purposes, we wish to find the
+vector of (real valued) parameters `bestpar` that minimize an objective
+function specified by an
+R function `fn(par, ... )` where `par` is the general
+vector of parameters, initially provided as a vector that is either the
+first argument to `optimr()` or else specified by a `par= ` argument. The 
+dot arguments are additional information needed to compute the function.
+Function minimization methods **may** require information on the gradient or 
+Hessian of the function, which we will assume to be furnished, if required, 
+by functions `gr(par, ...)` and `hess(par, ...)`.  Bounds or box constraints,
+if they are to be imposed, are given in the vectors `lower` and `upper`.
+
+As far as I am aware, all the optimizers included in the `optimx` package are
+**local** minimizers. The "SANN" method of `optim()`, a simulated annealing
+minimization tool, is excluded from the set of methods used by `optimr()` as it
+performs badly and simply runs for a specified number of function evaluations. 
+That is, it does not necessarily return a solution.
+
+Thus the solvers in **optimx** attempt to find a **local** minimum of the 
+objective function. Global optimization is a much bigger problem. Even finding
+a local minimum can often be difficult, and to that end, the `optimx` package 
+offers the function `kktchk()` to test the 
+Kuhn-Karush-Tucker conditions. These conditions essentially
+require that a local minimum has a zero gradient and all nearby points on the 
+function surface have a greater function value. There are many details that 
+are ignored in this very brief explanation. 
+
+## Intent of package `optimx`
+
+The goals in preparing `optimx` are
+
+- to provide a unified interface to allow the execution of many optimization solvers
+  through a common syntax, thereby allowing the solver to be changed with the
+  alteration of the `method` name
+  
+- to allow several solvers to be applied in a single call so that they may be
+  compared in their performance on a single problem
+  
+- to provide for easier examination of different features of optimization solvers,
+  for example, different gradient or Hessian approximations, or their use or 
+  omission. That is, to provide a framework for development of methods or
+  programs.
+  
+Note that these goals point to different modes of use of package `optimx`.
+
+Though unstated, a consideration throughout is to code the package and its
+components as much as possible in R and not call other languages. Given the
+large number of solvers that are built in other computing environments, this
+is aspirational rather than doctrinal.
+
+
+## Unifying the syntax
 
 Because the syntax for `optim()` is relatively convenient and already spans five
 different multiparameter minimization methods (or **solvers**), this syntax
@@ -49,7 +126,7 @@ optim(par, fn, gr = NULL, ...,
 Here `par` is the vector of starting parameters for the function `fn` which has
 an (optional) gradient function `gr`. `method` specifies the solver to be used.
 
-The benefits of a unified syntax are seen immediately if we look how `nlm()` and 
+The benefits of a unified syntax are seen immediately if we examine how `nlm()` and 
 `nlminb()` must be called, which we leave to the reader.
 
 ### Available solvers
@@ -65,6 +142,8 @@ library(optimx)
 checkallsolvers()
 ```
 
+`checkallsolvers` returns a list of **missing** or uninstalled solvers, so a
+NULL tells us all are ready to use. 
 Note that solvers can generally be categorized by whether they use the function,
 the function and gradient, or the function, gradient and hessian. Another
 nomenclature is "direct search", "descent", and "Newton-like" methods.
@@ -98,18 +177,18 @@ The function `proptimr()` is used to give a tidy output to the result of running
 `optimr()`.
 
 
-### Extra [1D] solver
+### Excluded [1D] solver
 
 There is also
 method "Brent" in `optim()` that is a one-parameter, or one-dimensional ([1D]), minimizer.
 Separately, base R has the one-parameter function `optimize()`. In the development
 of `optimx`, [1D] problems have not been a priority, though there is the illustrative
-script `onepar_test.R` in the `demo` directory of package `optimx`
-and at the time of writing, we advise the use of `optimize()`.
+script `onepar_test.R` in the `inst/doc/legacy-demo` directory of package `optimx`.
+At the time of writing, we advise the use of `optimize()`.
 
-### More than one method at a time
+## More than one method at a time
 
-The `method` argument must actually be a **single** character string. 
+The `method` argument to `optimr()` must actually be a **single** character string. 
 An attempt to call two solvers by, say, 
 
 ```
@@ -134,26 +213,33 @@ objective function to be minimized.
 
 ```{r sqmod2}
 solm <- opm(par=z0, fn=sqmod, gr=sqmod.g, method="MOST", xx=1.5)
+cat("Result of applying opm() to ",attr(solm,"fname"))
 print(summary(solm, order=value))
 ```
 
 Note that the summary offers a way to order the results. Here we have
 chosen to order them from the smallest minimum found, so that the first
-result is considered the best. Timing results are generally unreliable when
-they are as small as these.
+result could be considered the best, though we have seen cases where
+the lowest solution value is for a set of parameters that is infeasible.
+We caution that timing results are generally unreliable when
+they are as small as these, and also we have only a single timing.
 
 ### Using named arguments
 
 R allows a user to specify the arguments to a function like `optim` or,
 particularly, `optimr` by name, and to do so in any order. We recommend
 naming arguments, as using the **position** of arguments can, by very
-simple mistakes, get wrong answers. (We have done it ourselves!) However,
+simple mistakes, get wrong answers. (We have done it ourselves!) One such
+error is to include the `gr` argument when the solver does not use gradients
+and the function is not defined. We do admin, however,
 positional arguments do allow for shorter calling statements.
+
 
 An equally annoying error, however, is to use the WRONG argument name. For
 example, in one case it took me several hours to realize a very strange error
 was being caused by using `start=strt` rather than `par=strt` in calling the
-`snewtonm()` function.
+`snewtonm()` function. This may argue for calling the solvers via `optimr` as
+a way to avoid such naming errors.
 
 ### Examples of usage
 
@@ -175,76 +261,6 @@ was previously part of the package when the `optimx()` function was the primary
 I have found running the `demo()` takes too much keyboard entry for simple use.
 Instead the `inst/doc/examples/` can be loaded and run. They can be executed
 line by line in Rstudio IDE (https://www.rstudio.com/categories/rstudio-ide/).
-
-## "Optimization"
-
-The general nonliear optimization problem considers the minimization or 
-maximization of an objective function subject to equality and inequality
-constraints that are both linear and nonlinear. It comprehends the field
-of mathematical programming, and borders on nonlinear equations. 
-
-In R, what is referred to as "optimization", including the original `optim()`
-function and its replacement in this package, only allows for the minimization
-or maximization of nonlinear functions of
-multiple parameters subject to at most bounds constraints. Many methods
-offer extra facilities, but apart from **masks** (fixed parameters), such features are
-likely inaccessible via this package without some customization 
-of the code. Even masks are specified by bounds constraints where the upper and
-lower bounds coincide. This will generally "work" for methods that support 
-bounds constraints, but a few methods explicitly recognize masks and avoid
-extra computational work. Where possible, the solvers supplied in `optimx`
-try to be efficient in this way.
-
-For our purposes, we wish to find the
-vector of (real valued) parameters `bestpar` that minimize an objective
-function specified by an
-R function `fn(par, ... )` where `par` is the general
-vector of parameters, initially provided as a vector that is either the
-first argument to `optimr()` or else specified by a `par= ` argument. The 
-dot arguments are additional information needed to compute the function.
-Function minimization methods **may** require information on the gradient or 
-Hessian of the function, which we will assume to be furnished, if required, 
-by functions `gr(par, ...)` and `hess(par, ...)`.  Bounds or box constraints,
-if they are to be imposed, are given in the vectors `lower` and `upper`.
-
-As far as I am aware, all the optimizers included in the `optimx` package are
-**local** minimizers, possibly apart from the "SANN" method of `optim()`,
-which is excluded from the set of methods used by `optimr()` as it
-performs badly and simply runs for a specified number of function evaluations. 
-That is, it does not necessarily return a solution.
-
-The message is thus that the solvers attempt to find a **local** minimum of the 
-objective function. Global optimization is a much bigger problem. Even finding
-a local minimum can often be difficult, and to that end, the `optimx` package 
-offers the function `kktchk()` to test the 
-Kuhn-Karush-Tucker conditions. These conditions essentially
-require that a local minimum has a zero gradient and all nearby points on the 
-function surface have a greater function value. There are many details that 
-are ignored in this very brief explanation. 
-
-## Intent of package `optimx`
-
-The goals in preparing `optimx` are
-
-- to provide a unified interface to allow the execution of many optimization solvers
-  through a single syntax, thereby allowing the solver to be changed with the
-  alteration of the `method` name
-  
-- to allow several solvers to be applied in a single call so that they may be
-  compared in their performance on a single problem
-  
-- to provide for easier examination of different features of optimization solvers,
-  for example, different gradient or Hessian approximations, or their use or 
-  omission. That is, to provide a framework for development of methods or
-  programs.
-  
-Note that these goals point to different modes of use of package `optimx`.
-
-Though unstated, a consideration throughout is to code the package and its
-components as much as possible in R and not call other languages. Given the
-large number of solvers that are built in other computing environments, this
-is aspirational rather than doctrinal.
-
 
 ## Developments of the `optimx()` function
 
@@ -272,8 +288,7 @@ opm()` are as follows:
    - `optimx()` was intended to have features to allow for calling solvers 
    sequentially to create polyalgorithms, as well as for using multiple vectors
    of starting parameters. The combination of such options may cause unexpected
-   behaviour, and this function is now deprecated. See below for how such ideas 
-   are implemented in separate functions.
+   behaviour, and these features are now deprecated. 
    
    - `polyopt()` (built on `optimr()`) allows for running solvers sequentially
    to create a polyalgorithm. For example, one may want to run a number of 
@@ -281,77 +296,6 @@ opm()` are as follows:
    
    - `multistart()` allows multiple starting vectors to be used in a single
    call.
-
-
-## Bounds
-
-A number of methods support the inclusion of box (or bounds) constraints. 
-These are specified via the arguments `lower` and `upper` to either `opm()`
-or `optimr()`. It there are `n` parameters, these arguments may either 
-be assigned a single value or else a vector of `n` elements. A single value
-is replicated in an `n`-vector.
-
-**Masks** are bounds constraints where the upper and lower bound are equal,
-so essentially fixed parameters. 
-
-The function `optimx::bmchk()` has a rich set of tests for bounds and parameters.
-In particular, it returns information on whether the supplied parameters and 
-bounds are 
-
- - **admissible** meaning no lower bound exceeds an upper bound
- - **feasible** meaning all parameters are in the closed interval between the 
-   lower and upper bounds
- - **onbound** to flag cases where a parameter is on an upper or lower bound, as
-   some methods, `nmkb` in particular, fails if this is the case
- - **maskadded** when upper and lower bounds are close together
-
-Generally it is a poor idea to specify bounds that are too close together. For masks,
-make the lower and upper bounds equal, otherwise give the methods some space to 
-adjust parameters, as most methods rely on various tolerances and heuristics.
-Moreover, approximations to derivatives using finite difference have to take steps
-along the parameters. I know of no generally available program that checks that
-finite difference steps do not violate bounds.
-
-## Function and parameter scaling
-
-`optim()` uses `control$fnscale` to "scale" the value of the function or gradient
-computed by `fn` or `gr` respectively. In practice, the only use for this scaling 
-is to convert a maximization to a minimization. Most of the methods applied are
-function **minimization** tools, so that if we want to maximize a function, we 
-minimize its negative. `optimr()` and `opm()`
-include a `maximize` control, and we would recommend avoiding `fnscale` use. Note that 
-having both `fnscale` and `maximize` could create a conflict. We check for this 
-in `optimr()` and try to 
-ensure both controls are set consistently. There is a further risk of conflict 
-with the use of numerical approximation of derivatives, as discussed later.
-
-As general advice, I believe users should recast their problem as a **minimization**, 
-either manually or with some pre-processing code, and then use post-solution processing
-to return the answer in a fashion relevant to the context. Unfortunately, there are 
-many places where automated scaling by a negative number can create havoc.
-
-### Modified, unused or unwanted controls
-
-Because different methods use different control parameters, and may even put them into 
-arguments rather than the `control` list, a lot of the code in `optimr()` is purely for
-translating or transforming the names and values to achieve the desired result. This is
-sometimes not possible precisely. A method which uses `control$trace = TRUE` (a logical
-element) has only "on" or "off" for controlling output. Other methods use an integer
-for this `trace` object, or call it something else that is an integer, in which case 
-there are more levels of output possible. 
-
-In package `optimx` we have had to navigate such obstacles:
-
- - I have found it is important to remove (i.e., set NULL) controls that are not used
-   for a method. Moreover, since R can leave objects in the workspace, I find it
-   important to set any unused or unwanted control to NULL both before and after
-   calling a method. 
-
- - The packages attempts to provide a sane set of choices for the default values of
-   controls. In many cases, `optimx` functions will NOT be able to use all the 
-   options available for some solvers, and users will need to access such functions
-   directly.
-
 
 ## Running multiple methods -- `opm()`
 
@@ -478,6 +422,119 @@ polyalgorithm or multiple methods. For users really wishing to do this, I believ
 available source codes `opm.R`, `polyopt.R` and `multistart.R` provide a sufficient 
 base that the required tools can be fashioned fairly easily.
 
+
+
+
+## Bounds
+
+A number of methods support the inclusion of box (or bounds) constraints. 
+These are specified via the arguments `lower` and `upper` to either `opm()`
+or `optimr()`. It there are `n` parameters, these arguments may either 
+be assigned a single value or else a vector of `n` elements. A single value
+is replicated in an `n`-vector.
+
+**Masks** are bounds constraints where the upper and lower bound are equal,
+so essentially fixed parameters. 
+
+The function `optimx::bmchk()` has a rich set of tests for bounds and parameters.
+In particular, it returns information on whether the supplied parameters and 
+bounds are 
+
+ - **admissible** meaning no lower bound exceeds an upper bound
+ - **feasible** meaning all parameters are in the closed interval between the 
+   lower and upper bounds
+ - **onbound** to flag cases where a parameter is on an upper or lower bound, as
+   some methods, `nmkb` in particular, fails if this is the case
+ - **maskadded** when upper and lower bounds are close together
+
+Generally it is a poor idea to specify bounds that are too close together. For masks,
+make the lower and upper bounds equal, otherwise give the methods some space to 
+adjust parameters, as most methods rely on various tolerances and heuristics.
+Moreover, approximations to derivatives using finite difference have to take steps
+along the parameters. I know of no generally available program that checks that
+finite difference steps do not violate bounds.
+
+## Function and parameter scaling
+
+`optim()` uses `control$fnscale` to "scale" the value of the function or gradient
+computed by `fn` or `gr` respectively. In practice, the only use for this scaling 
+is to convert a maximization to a minimization. Most of the methods applied are
+function **minimization** tools, so that if we want to maximize a function, we 
+minimize its negative. `optimr()` and `opm()`
+include a `maximize` control, and we would recommend avoiding `fnscale` use. Note that 
+having both `fnscale` and `maximize` could create a conflict. We check for this 
+in `optimr()` and try to 
+ensure both controls are set consistently. There is a further risk of conflict 
+with the use of numerical approximation of derivatives, as discussed later.
+
+As general advice, I believe users should recast their problem as a **minimization**, 
+either manually or with some pre-processing code, and then use post-solution processing
+to return the answer in a fashion relevant to the context. Unfortunately, there are 
+many places where automated scaling by a negative number can create havoc.
+
+## Access to solver-specific controls
+
+Because different methods use different control parameters, and may even put them into 
+arguments rather than the `control` list, a lot of the code in `optimr()` is purely for
+translating or transforming the names and values to achieve the desired result. This is
+sometimes not possible precisely. A method which uses `control$trace = TRUE` (a logical
+element) has only "on" or "off" for controlling output. Other methods use an integer
+for this `trace` object, or call it something else that is an integer, in which case 
+there are more levels of output possible. 
+
+In package `optimx` we have had to navigate such obstacles:
+
+ - I have found it is important to remove (i.e., set NULL) controls that are not used
+   for a method. Moreover, since R can leave objects in the workspace, I find it
+   important to set any unused or unwanted control to NULL both before and after
+   calling a method. 
+
+ - The package attempts to provide a sane set of choices for the default values of
+   controls. In many cases, `optimx` functions, particularly `opm()`, will 
+   NOT be able to use all the options available for some solvers, and users will 
+   need to access such functions directly.
+   
+In some cases, it is possible to access solver-specific controls, but we caution
+that this is still a developmental feature. We illustrate with an example.
+
+### Example of use of local control parameters
+
+Since we have the source code to `optimr()` which is where all the solvers are
+called, it is possible to alter local control parameters. This is, however, not
+intended for general users. On the other hand, we do provide an illustration of
+how to make the modifications. The example is the `nelder_mead()` solver in 
+package `pracma`. This is set by default to "converge" when the variance of the
+function values is no greater than `tol`, for which the default is 1.0e-8.
+
+`tol` is, unfortunately, a common name, and is one of the `optimx` default
+controls. Thus we have allowed a special control named `pracmanmtol` for 
+routine `optimr()`. Note that this is not intended to be applied to `opm()`.
+Special controls should be used for the solver for which they are appropriate.
+We believe that it is sensible to use a mechanism like that suggested here so
+that the solver's original default settings are preserved, but can be changed 
+by the user. `pracmanmtol` could also be added to `ctrldefault()` if it is
+generally important to use it. Below in the discussion of `ctrldefault()`
+further examples are referenced.
+
+
+```{r pracmanm1}
+library(optimx)
+fnR <- function (x, gs=100.0) 
+{
+  n <- length(x)
+  x1 <- x[2:n]
+  x2 <- x[1:(n - 1)]
+  sum(gs * (x1 - x2^2)^2 + (1 - x2)^2)
+}
+x0 <- rep(pi, 4)
+
+apnm0<-optimr(x0, fnR, method="pracmanm")
+proptimr(apnm0)
+apnm1<-optimr(x0, fnR, method="pracmanm", control=list(pracmanmtol=1e-13))
+proptimr(apnm1)
+```
+
+
 ## Derivatives
 
 Derivative information is used by many optimization methods. In particular, the 
@@ -593,7 +650,7 @@ cause the package to be archived will NOT be corrected.
 Illustrations of how `optimx()` is used are included in the files
 in directory `inst/doc/legacy-demo/`. Note that some of these examples have
 long run times. Moreover, the objective functions are such that some of the solvers
-faile to find a satisfactory optimum.
+fail to find a satisfactory optimum.
 
 ## Solvers provided with the `optimx` package
 
@@ -624,7 +681,7 @@ on the function surface, which will be either a maximum, minimum or saddle
 point. There are also a number of interesting theorems that show the approach
 is in some way "best". However, the assumptions that underly such theorems
 generally do not apply when we would like them to, and Newton-like methods,
-and in particular the classical approach 
+and in particular the classical approach, 
 generally perform dismally on real-life problems. 
 
 This classic approach starts with a set of parameters $x0$ for our 
@@ -732,7 +789,7 @@ In a similar fashion, **Truncated Newton** methods (sometimes also called
 **Inexact Newton methods**) try to simplify the solution of the Newton
 equations by solving them with a linear conjugate gradients approach.
 There are a number of implementations of such ideas. In `optimx`, the
-Matlab codes of by brother Stephen Nash (@SGN83, @NashTN2000) have been
+Matlab codes of my brother Stephen Nash (@SGN83, @NashTN2000) have been
 translated to R for unconstrained (`tn()`) or bounds constrained (`tnbc()`)
 problems. Relevant files -- the transformation from Matlab needed some
 mildly awkward coding -- are Rtnmin-package.R, tnbc.R, tn.R and zzz.R.
@@ -742,7 +799,10 @@ function.
 
 Of the descent methods, the truncated Newton codes in `optimx` are likely
 the ones most in need of review and rework, as they have been the least
-revised
+revised. Moreover, the codes were largely research programs rather than
+production ones. From the package `nloptr` the `tnewton()` function is
+available in `optimx` using the method name `tnewt`, and this performs
+quite well. 
 
 ## Some other functions in the package
 
@@ -766,7 +826,7 @@ also records the returned answer structure. It will be part of the
 `./inst/doc/` collection of information in the package.
 
 Note that calling `optimr()` with `control=list(  )` containing controls 
-that are NOT in the default set will cause these to be passed to the relevant 
+that are NOT in the default set will try to cause these to be passed to the relevant 
 solver. However, no special checks that these are valid is performed. 
 CAUTION! Here is an example where we want to give the solver 
 `minqa::bobyqa()` some parameters that alter the search strategy.
@@ -810,8 +870,8 @@ default settings used within `optimx`.
 ## Functions that were formerly in the `optextras` package
 
 Optimization methods share a lot of common infrastructure, and much of this was
-collected in my retired `optextras` package. (Now in the `optimx` package.) 
-The routines used in the current package are as follows.
+collected in my retired `optextras` package. These have now been consolidated 
+in the `optimx` package. The routines used are as follows.
 
 ### axsearch()
 
@@ -831,14 +891,12 @@ rarely extreme, but so far a reasonable test has proved elusive.
 
 ### grfwd(), grback(), grcentral(), grnd() and grpracma()
 
-These have be discussed above under Derivatives.
+These have be discussed above under **Derivatives**.
 
 ### fnchk(), grchk() and hesschk()
 
 These functions are provided to allow for detection of user errors 
-in supplied function, gradient or hessian functions. Though we do 
-not yet use hessians in the optimizers called, it is hoped that
-eventually they can be incorporated. 
+in supplied function, gradient or hessian functions. 
 
 `fnchk()` is mainly a tool to ensure that the supplied function 
 returns a finite scalar value when evaluated at the supplied parameters. 
@@ -893,7 +951,7 @@ of the information `proptimr()` attempts to display. For example, the "nlm"
 solver (`nlm()` from base R) only returns "iterations" (likely computed
 gradient evaluations) but not function evaluations.
 
-Where possible, `proptimr()` uses extra function, gradiend and hessian count
+Where possible, `proptimr()` uses extra function, gradient and hessian count
 information generated by `optimr()`. Note that the `counts` vector of function
 and/or gradient or iteration counts is still returned by `optimr` but many 
 methods return only partial information and none appear to give the hessian

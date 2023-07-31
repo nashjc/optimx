@@ -2,6 +2,7 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
             method=c("Nelder-Mead","BFGS"), hessian=FALSE,
             control=list(),
              ...) {
+  fname <- as.list(sys.call())$fn #FAILED rlang::as_name(as.list(sys.call())$fn)
   # test for missing functions
   tmp <- is.null(fn) # will fail if undefined
   tmp <- is.null(gr) # will fail if undefined, but not if missing from call
@@ -196,6 +197,7 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
     ansout # return(ansout)
     answer <- structure(ansout, details = ans.details, maximize = control$maximize,
             npar = npar, class = c("opm", "data.frame"))
-
+    attr(answer,"fname") <- fname
+    answer
 } ## end of opm
 

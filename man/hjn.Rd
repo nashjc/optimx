@@ -5,7 +5,8 @@
 \description{
   The purpose of \code{hjn} is to minimize an unconstrained or bounds
   (box) and mask constrained function 
-  of several parameters by a Hooke and Jeeves pattern search. This code is
+  of several parameters by a Hooke and Jeeves pattern search. This 
+  didactic code is
   entirely in R to allow users to explore and understand the method. It also
   allows bounds (or box) constraints and masks (equality constraints) to be
   imposed on parameters. 

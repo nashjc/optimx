@@ -1,9 +1,4 @@
 checksolver <- function(method, allmeth, allpkg){
-#    basestats <- c("Nelder-Mead","BFGS","L-BFGS-B","CG","SANN", "nlm", "nlminb", "hjn")
-#     cat("method = ",method,"\n")
-#     cat("allmeth:"); print(allmeth)
-#     cat("allpkg:");print(allpkg)
-#    if (method %in% basestats) return(method)
 #    Checks if method is available in allmeth
     imeth <- which(method == allmeth)
     if (length(imeth) < 1) {
@@ -14,7 +9,7 @@ checksolver <- function(method, allmeth, allpkg){
       if ( requireNamespace(pkg, quietly = TRUE)) {
         return(method)
       } else { 
-        warning("Package ",pkg," for method ",method," is not available")
+        warning("Package ",pkg," for method ",method,"("," is not available")
         return("????")
       }
     }     
@@ -25,13 +20,18 @@ checkallsolvers <- function() {
   badmeth <- c() # initially empty
   cc <- ctrldefault(4) # 4 is arbitrary
   ameth <- cc$allmeth
+  tnam <- cc$truename
   apkg  <- cc$allpkg
   for (m1 in ameth) {
-    p1 <- apkg[which(ameth == m1)]
-    cat("Check if method ",m1," from package ",p1," is available\n")
+    imeth <- which(ameth == m1)
+    p1 <- apkg[imeth]
     csres <- checksolver(m1, ameth, apkg)
     if (csres != m1) {
       badmeth <- c(badmeth, m1)  
+      cat("method ",m1," is missing\n")
+    }
+    else {
+      cat("method ",m1,"(",tnam[imeth],") from package ",p1," is available\n")
     }
   }
   if (length(badmeth) > 0) {

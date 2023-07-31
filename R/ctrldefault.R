@@ -9,6 +9,12 @@ ctrldefault <- function(npar) {
                  "hjn", "lbfgs", "subplex", "ncg", "nvm", "mla", 
                  "slsqp", "tnewt", "anms", "pracmanm", "nlnm")
 
+      truename <- c("BFGS", "CG", "Nelder-Mead", "L-BFGS-B", "nlm", "nlminb", 
+                "lbfgsb3c", "Rcgmin", "Rtnmin", "Rvmmin", "snewton", "snewtonm",
+                 "spg", "ucminf", "newuoa", "bobyqa", "uobyqa", "nmkb", "hjkb", 
+                 "hjn", "lbfgs", "subplex", "ncg", "nvm", "mla", 
+                 "slsqp", "tnewton", "anms", "nelder_mead", "neldermead")
+
 #  allpkg has package where element of allmeth is found
       allpkg <-  c("stats", "stats", "stats", "stats", "stats", "stats",
                 "lbfgsb3c", "optimx", "optimx", "optimx", "optimx", "optimx",
@@ -75,7 +81,7 @@ ctrldefault <- function(npar) {
       bdmeth <- bdmeth[ which(bdmeth %in% OKmeth) ]
    
 
-      maskmeth <- c("Rcgmin", "nvm", "hjn", "ncg", "snewtonm", "nlminb") 
+      maskmeth <- c("Rcgmin", "nvm", "hjn", "ncg", "snewtonm", "nlminb", "L-BFGS-B") 
       maskmeth <- maskmeth[ which(maskmeth %in% OKmeth) ]
   
 #     valid gradient approximations
@@ -86,6 +92,7 @@ ctrldefault <- function(npar) {
         acctol = 0.0001, # used for acceptable point test in backtrack linesearch
         all.methods = FALSE, # we do NOT want all methods to be the default
         allmeth = OKmeth, # to define the set of all methods
+        truename = truename, # true names
         allpkg = OKpkg, # to list all the packages required
         appgr = FALSE, # assume we are NOT using a numerical approximation to the gradient
 #        avoidmeth = avoidmeth, # methods to avoid using

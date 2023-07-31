@@ -81,6 +81,12 @@ VERSION 2023-06-25
 
       o This is a MAJOR revision and overhaul of the optimx package and its components.
       o offset removed as control. Use reltest.
+      o optimr now tries to add function name attribute to returned 'value' object; 
+        opm tries to add this attribute to the answer object.
+      o 20230730: added pracma::nelder_mead and nloptr::neldermead
+      o ctrldefault() now offers collections (vectors) of methods nogrmeth, grmeth, hessmeth
+        for those with no gradient requirement, gradient methods and methods that can or
+        must have Hessian function supplied
       o opm() does more checks e.g., missing gr, methods inappropriate to problem
       o nvm and Rvmminb: fixed issue that sometimes trystep (distance to bound
         in search direction) came back as small NEGATIVE number) by setting

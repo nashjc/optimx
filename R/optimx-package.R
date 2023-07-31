@@ -2,7 +2,6 @@
 ## This file contains support routines (methods) for the optimx() function
 ##################################################################
 summary.opm <- function(object, order = NULL, par.select = TRUE, ...) {
-	
 	# internally object is referred to as x and par.select as par
 	x <- object
 	par <- par.select
@@ -18,15 +17,14 @@ summary.opm <- function(object, order = NULL, par.select = TRUE, ...) {
 	} else if (is.numeric(par)) {
                 idx <- intersect(par, seq_len(npar))
 	} else stop("par.select must be character, logical or numeric")
-
-        selidx <- union(idx, (npar+1):ncol(x))
+    selidx <- union(idx, (npar+1):ncol(x))
 #        x <- x[, selidx]
-        cns<-rep("",npar)
+    cns<-rep("",npar)
         for (j in 1:npar) { cns[[j]]<- paste("s",j,sep='')}
 #        status<- status[, idx] # This is removing columns
 #        cns <- cns[idx]
-        cnx <- colnames(x) # always have > 1 column in x so OK
-        cnx[which(cnx == "convergence")]<-"conv"
+    cnx <- colnames(x) # always have > 1 column in x so OK
+    cnx[which(cnx == "convergence")]<-"conv"
 
 	# xx same as x except:
 	# - it has a rownames column
@@ -55,10 +53,8 @@ summary.opm <- function(object, order = NULL, par.select = TRUE, ...) {
 
 	# perform non-standard evaluation (as in transform and subset functions)
 	order. <- eval(e, xx, parent.frame())
-
 	# ensure order. is a list
 	if (!is.list(order.)) order. <- list(order.)
-
 	o <- do.call(base::order, order.)
 #	x <- x[o, ]
         nsel <- length(idx)
@@ -74,7 +70,6 @@ summary.opm <- function(object, order = NULL, par.select = TRUE, ...) {
         colnames(x) <- cnxx[colset]
 	# ensure details attribute corresponds to data
 	attr(x, "details") <- attr(x, "details")[rownames(x), ]
-
 	x
 }
 ##################################################################

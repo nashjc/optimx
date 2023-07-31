@@ -103,19 +103,23 @@ lower[3] <- upper[3]
 xx[3] <- lower[3] # MUST reset parameter also
 
 
-## methn <- c("ncg", "ncgqs")
-
-methn <- c("Rcgmin", "ncg")
-# 20220311 -- ncg does not stop. ncgqs stops cannot handle masks ?? fix
-
 ncgbdm <- optimr(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="ncg", 
-              control=list(trace=1, watch=TRUE))
+                 control=list(trace=1, watch=TRUE))
 proptimr(ncgbdm)
 
+## lbfmsk <- optim(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="L-BFGS-B", 
+##                  control=list(trace=1, watch=TRUE))
+## proptimr(ncgbdm)
 
-allbdm <- opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="ALL", 
-               control=list(trace=2))
+allbdm <- try(opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="ALL", 
+               control=list(trace=2)))
 print(summary(allbdm, order=value))
+
+mmth <- ctrldefault(2)$maskmeth
+allmsk <- try(opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method=mmth, 
+                  control=list(trace=2)))
+print(summary(allmsk, order=value))
+
 
 #?? fails, and ncg never stops
 #allbdm <- opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method=c("ncgqs"), control=list(trace=2))
