@@ -401,16 +401,30 @@ For problems with multiple minima, or which are otherwise difficult to solve,
 it is sometimes helpful to attempt an optimization from several starting points.
 `multistart()` is a simple wrapper to allow this to be carried out. Instead of 
 the vector `par` for the starting parameters argument, however, we now have a 
-matrix `parmat`, each **row** of which is a set of starting parameters.
+matrix `parmat`, each **row** of which is a set of starting parameters. Note that
+only one method can be specified in the call. 
 
 ```{r multix1}
-# We use already loaded fnR and grR from previous chunk
-pm <- rbind(rep(1,4), rep(pi, 4), rep(-2,4), rep(0,4), rep(20,4))
-pm <- as.matrix(pm)
-cat("multistart matrix:\n")
-print(pm)
-ans <- multistart(pm, fnR, grR, method="Rvmmin", control=list(trace=0))
-ans
+# edited from inst/doc/examples/StyblinskiTang2308.R
+require(optimx, quietly=TRUE)
+fnStyblinskiTang <- function(x) 0.5 * sum(x^4 - 16*x^2 + 5*x)
+grST <- function(x) {
+   2*x^3 - 16*x + 2.5
+}
+n <- 4
+cat("Globalmin ",n," = ",(-39.16599)*length(x0),"\n")
+methlist<-c("hjn", "nvm", "Nelder-Mead")
+stmat<-matrix(runif(6*n, -5, 5), nrow=6, ncol=n)
+cat("Starting parameters (rows of matrix):\n")
+print(stmat)
+for (mstr in methlist){
+  cat("Method ",mstr,":\n")
+  mtst <- multistart(stmat, fnStyblinskiTang, grST, method=mstr)
+  print(mtst)
+}
+# Try a single start
+tst1<-opm(rep(-5, n), fnStyblinskiTang,grST,method=methlist)
+summary(tst1)
 ```
 
 Personally, I have not been happy with the outputs of such approaches in the few cases
