@@ -7,7 +7,7 @@ kktchk <- function(par, fn, gr, hess=NULL, upper=NULL, lower=NULL, maximize=FALS
 #  fval = objective function value
 #  ngr = gradient evaluated at parameters par
 #  nHes = Hessian matrix evaluated at the parameters par
-#  nbm = number of active bounds and masks from gHgenb (gHgen returns 0)
+#  nbm = number of active bounds and masks
 #  maximize = logical TRUE if we want to maximize the function. Default FALSE.
 #  control = list of controls, currently, 
 #            kkttol=1e-3, kkt2tol=1e-6, ktrace=FALSE

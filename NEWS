@@ -81,6 +81,8 @@ VERSION 2023-06-25
 
       o This is a MAJOR revision and overhaul of the optimx package and its components.
       o offset removed as control. Use reltest.
+      o gHgen.R and gHgenb.R are no longer needed by optimx and are kept purely for 
+        legacy uses by others.
       o optimr now tries to add function name attribute to returned 'value' object; 
         opm tries to add this attribute to the answer object.
       o 20230730: added pracma::nelder_mead and nloptr::neldermead
