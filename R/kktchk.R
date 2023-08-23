@@ -1,4 +1,5 @@
-kktchk <- function(par, fn, gr, hess=NULL, upper=NULL, lower=NULL, maximize=FALSE, control=list(), ...) {
+kktchk <- function(par, fn, gr, hess=NULL, upper=NULL, lower=NULL, maximize=FALSE, 
+          control=list(dowarn=TRUE), ...) {
 # Provide a check on Kuhn-Karush-Tucker conditions based on quantities
 # already computed. Some of these used only for reporting.
 ##

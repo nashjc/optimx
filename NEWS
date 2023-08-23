@@ -84,6 +84,10 @@ VERSION 2023-08-23
            # set initial parameters in vector init, lower and upper bounds in lo and up
            chkpar <- bmchk(init, lower=lo, upper=up)
            if (chkpar$parchanged) init <- chckpar$bvec
+      o kktchk now has control with default dowarn=TRUE to allow suppression of overly
+        common warning that estimated Hessian at solution is asymmetric. The test for
+        asymmetry is very difficult to set up in a way that does not give warnings when
+        the Hessian estimate is reasonable (false positives).
 
 VERSION 2023-06-25
 

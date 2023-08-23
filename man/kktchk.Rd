@@ -16,7 +16,7 @@
 }
 \usage{
      kktchk(par, fn, gr, hess=NULL, upper=NULL, lower=NULL, 
-                 maximize=FALSE, control=list(), ...)
+                 maximize=FALSE, control=list(dowarn=TRUE), ...)
 }
 \arguments{
  \item{par}{A vector of values for the parameters which are supposedly optimal.}
@@ -92,6 +92,8 @@ ans <- list() # to ensure structure available
 
 ans$par <- c(3.154083, -3.689620)
 
+# 2023-8-23 need dowarn specified or get error
+# Note: may want to set control=list(dowarn=TRUE)
 kkans <- kktchk(ans$par, jones, jonesg)
 kkans
 
