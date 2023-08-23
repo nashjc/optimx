@@ -437,8 +437,6 @@ available source codes `opm.R`, `polyopt.R` and `multistart.R` provide a suffici
 base that the required tools can be fashioned fairly easily.
 
 
-
-
 ## Bounds
 
 A number of methods support the inclusion of box (or bounds) constraints. 
@@ -467,6 +465,66 @@ adjust parameters, as most methods rely on various tolerances and heuristics.
 Moreover, approximations to derivatives using finite difference have to take steps
 along the parameters. I know of no generally available program that checks that
 finite difference steps do not violate bounds.
+
+### Infeasible parameters
+
+If a user specifies infeasible parameters, `optimx::optimr()` will stop. However,
+there is an easy way to adjust initial parameters to be within bounds. This does,
+of course, assume that the bounds are specified correctly and the parameters are
+incorrect. Here is an example of how to make the adjustment.
+
+```
+# set initial parameters in vector init, lower and upper bounds in lo and up
+   chkpar <- bmchk(init, lower=lo, upper=up)
+   if (chkpar$parchanged) init <- chckpar$bvec
+```           
+
+### Display of solution status w.r.t. bounds
+
+A recent addition to the output summary is a set of status flags showing which
+parameters are on lower or upper bounds or are masked. The following example 
+illustrates this. At the time of writing, I have not diagnosed why method
+`nmkb` does not indicate that the solution is on a lower bound. However, `nmkb`
+from the `dfoptim` package uses a transfinite transformation of the parameters
+to keep parameters **within** bounds, so the parameter returned may be very
+slightly different from the bound, so not getting flagged.
+
+The example also suppresses a warning for a lack of symmetry in the estimated
+Hessian at solution in order to keep this presentation tidy. The warning
+is very common and I have yet to find a suitable 
+test for asymmetry that works well across the range of different problems.
+
+```{r bddisplay, echo=TRUE}
+XRosenbrock.f <- function (x) 
+{
+    n <- length(x)
+    x1 <- x[2:n]
+    x2 <- x[1:(n - 1)]
+    sum(100 * (x1 - x2^2)^2 + (1 - x2)^2)
+}
+XRosenbrock.g <- function (x) 
+{
+    n <- length(x)
+    g <- rep(NA, n)
+    g[1] <- 2 * (x[1] - 1) + 400 * x[1] * (x[1]^2 - x[2])
+    if (n > 2) {
+        ii <- 2:(n - 1)
+        g[ii] <- 2 * (x[ii] - 1) + 400 * x[ii] * (x[ii]^2 - x[ii + 
+            1]) + 200 * (x[ii] - x[ii - 1]^2)
+    }
+    g[n] <- 200 * (x[n] - x[n - 1]^2)
+    g
+}
+
+lo <- (2:5)
+up <- (4:7)
+st <- 0.5*(lo+up)
+brose <- opm(st, XRosenbrock.f, XRosenbrock.g, method="MOST", lower=lo, upper=up, 
+              control=list(dowarn=FALSE))
+# warnings turned off to avoid kktchk Hessian symmetry warning on most methods
+summary(brose, order=value)
+
+```
 
 ## Function and parameter scaling
 

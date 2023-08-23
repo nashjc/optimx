@@ -77,6 +77,14 @@ NEWS from the optimx package
 
 Some comments apply to deprecated packages optimr on CRAN and optimrx on R-forge.
 
+VERSION 2023-08-23
+      o Thanks to Mark Pletscher for uncovering a bug due to a typo in optimr(). Also
+        noting that optimr() now fails if input parameters are infeasible. However, 
+        users can pre-adjust parameters as follows
+           # set initial parameters in vector init, lower and upper bounds in lo and up
+           chkpar <- bmchk(init, lower=lo, upper=up)
+           if (chkpar$parchanged) init <- chckpar$bvec
+
 VERSION 2023-06-25
 
       o This is a MAJOR revision and overhaul of the optimx package and its components.

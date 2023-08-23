@@ -31,5 +31,6 @@ ans <- optimr(xx, jones, jonesg, method="Rvmmin")
 ans
 
 ans$par <- c(3.154083, -3.689620)
-kkans <- kktchk(ans$par, jones, jonesg)
+# 20230823 set dowarn
+kkans <- kktchk(ans$par, jones, jonesg, control=list(dowarn=TRUE))
 kkans
