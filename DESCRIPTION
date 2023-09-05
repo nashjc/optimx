@@ -1,6 +1,6 @@
 Package: optimx
-Version: 2023-8.23
-Date: 2023-08-23
+Version: 2023-9.1
+Date: 2023-09-01
 Title: Expanded Replacement and Extension of the 'optim' Function
 Authors@R: c( person(given = c("John", "C"), family = "Nash", role =
     c("aut", "cre"), email = "nashjc@uottawa.ca"), person(given =
@@ -36,6 +36,7 @@ Suggests:
     lbfgs,
     subplex,
     marqLevAlg,
-    testthat (>= 3.0.0)
-VignetteBuilder: knitr
+    testthat (>= 3.0.0),
+    R.rsp
+VignetteBuilder: R.rsp
 Config/testthat/edition: 3
