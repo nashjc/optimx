@@ -77,6 +77,11 @@ NEWS from the optimx package
 
 Some comments apply to deprecated packages optimr on CRAN and optimrx on R-forge.
 
+VERSION 2023-09-01
+      o Used Henrik Bengsston's R.rsp method to install static pdf vignettes as some
+        CRAN test platforms seem to be missing files needed to build vignettes from 
+        Rmarkdown source files.
+
 VERSION 2023-08-23
       o Thanks to Mark Pletscher for uncovering a bug due to a typo in optimr(). Also
         noting that optimr() now fails if input parameters are infeasible. However, 
