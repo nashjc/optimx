@@ -286,13 +286,12 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
             if(control$trace > 3) cat("L-BFGS-B start: ")
             ans <- try(optim(par=par, fn=efn, gr=egr, 
                       lower=lower, upper=upper, method="L-BFGS-B", hessian=FALSE, 
-                       control=mcontrol, ...))
+                       control=mcontrol)) # remove , ... 231016
             if(control$trace > 3) cat(" ans$value=",ans$value,"\n")
           }
         } else {
           ans <- try(optim(par=par, fn=efn, gr=egr, 
-                method=method, hessian=FALSE, control=mcontrol))
-#                method=method, hessian=FALSE, control=mcontrol, ...))
+                method=method, hessian=FALSE, control=mcontrol)) # remove , ... 231016
         }
         if (inherits(ans,"try-error")) { # bad result -- What to do?
 		  ans<-list() # ans not yet defined, so set as list
@@ -325,7 +324,6 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
         ## if(nsctrl > 0) { stop("There are no extra controls set up for ",method) }
         ans <- try(nlminb(start=spar, objective=efn, gradient=egr, hessian=ehess, lower=slower, 
 		upper=supper, control=mcontrol))
-#		upper=supper, control=mcontrol,  ...))
         if (! inherits(ans, "try-error")) {
 		# Translate output to common format and names
         	ans$value<-ans$objective
@@ -1117,6 +1115,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
 ## --------------------------------------------
       else if (method == "lbfgsb3c") {# Use 2011 L-BFGS-B wrapper
         if (control$trace > 1) cat("lbfgsb3c\n")
+        mcontrol$maxit <- control$maxit # 151217 JN
         mcontrol$trace <- control$trace
 # 170924 no longer needed
 ##        if (control$trace < 1) {mcontrol$iprint <- -1} else {mcontrol$iprint <- control$trace} 
