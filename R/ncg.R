@@ -47,7 +47,7 @@ ncg <- function(par, fn, gr, bds, control = list()) {
             " bounds = ", bounds, "\n")
     # Initial function value -- may NOT be at initial point specified by user.
     if (trace > 2) {cat("Try function at initial point:");  print(bvec)  }
-    f <- try(fn(bvec), silent = TRUE)  # Compute the function at initial point.
+    f <- try(fn(bvec), silent = FALSE)  # Compute the function at initial point.
     if (trace > 0) { cat("Initial function value=", f, "\n") }
     if (inherits(f,"try-error")) {
         msg <- "Initial point is infeasible."

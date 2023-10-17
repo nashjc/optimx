@@ -128,7 +128,7 @@ nvm <- function(par, fn, gr, bds, control = list()) {
   }
   else {  mygr<-gr } # end else
   ############# end test gr ####################
-  f<-try(fn(bvec), silent=TRUE) # Compute the function. NO dotargs!!!
+  f<-try(fn(bvec), silent=FALSE) # Compute the function. NO dotargs!!!
   if (inherits(f,"try-error") | is.na(f) | is.null(f) | is.infinite(f)) {
      msg <- "Initial point gives inadmissible function value"
      conv <- 20
@@ -308,7 +308,7 @@ nvm <- function(par, fn, gr, bds, control = list()) {
           }  # end test on free params
         }  # end reactivate constraints loop
       }  # if bounds
-      test <- try(g <- mygr(bvec), silent = TRUE) 
+      test <- try(g <- mygr(bvec), silent = FALSE)
       if (inherits(test, "try-error")) stop("Bad gradient!!")
       if (any(is.nan(g))) stop("NaN in gradient")
       ig <- ig + 1
