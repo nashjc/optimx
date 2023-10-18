@@ -150,7 +150,7 @@ Rvmminu <- function(par, fn, gr=NULL, control = list(), ...) {
   } # end else
   ############# end setup gr ####################
   #
-  f<-try(fn(bvec, ...), silent=TRUE) # Compute the function.
+  f<-try(fn(bvec, ...), silent=FALSE) # Compute the function.
   if (inherits(f, "try-error") | is.na(f) | is.null(f) | is.infinite(f)) {
      msg <- "Initial point gives inadmissible function value"
      conv <- 20
@@ -347,7 +347,7 @@ Rvmminu <- function(par, fn, gr=NULL, control = list(), ...) {
 #
 #
 #
-        test <- try(g <- mygr(bvec, ...), silent = TRUE)  
+        test <- try(g <- mygr(bvec, ...), silent = FALSE)
         if (inherits(test, "try-error") ) stop("Bad gradient!!")
         if (any(is.nan(g))) stop("NaN in gradient")
         ig <- ig + 1

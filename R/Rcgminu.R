@@ -121,7 +121,7 @@ Rcgminu <- function(par, fn, gr, control = list(), ...) {
         cat("Try function at initial point:")
         print(bvec)
     }
-    f <- try(fn(bvec, ...), silent = TRUE)  # Compute the function at initial point.
+    f <- try(fn(bvec, ...), silent = FALSE)  # Compute the function at initial point.
     if (trace > 0) {
         cat("Initial function value=", f, "\n")
     }
