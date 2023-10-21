@@ -27,6 +27,9 @@ t1 <- optimr(x0, fnt, grt, hesst, method="snewton", control=list(trace=0, usexxx
 proptimr(t1)
 t1m <- optimr(x0, fnt, grt, hesst, method="snewtonm", control=list(trace=0), fscale=3.0)
 proptimr(t1m)
+# Check alternate name works OK
+t1mm <- optimr(x0, fnt, grt, hesst, method="snewtm", control=list(trace=0), fscale=3.0)
+proptimr(t1mm)
 
 t1nlmo <- optimr(x0, fnt, grt, hess=hesst, method="nlm", fscale=3.0, 
                  control=list(trace=0))

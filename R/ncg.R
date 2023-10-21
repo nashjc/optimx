@@ -25,8 +25,7 @@ ncg <- function(par, fn, gr, bds, control = list()) {
         cat("an R implementation of Alg 22 with Yuan/Dai modification\n")
     }
     bvec <- par  # copy the parameter vector
-    n <- length(bvec)  # number of elements in par vector
-    maxfeval <- round(sqrt(n + 1) * maxit)  # change 091219
+    maxfeval <- round(sqrt(npar + 1) * maxit)  # change 091219
     ig <- 0  # count gradient evaluations
     ifn <- 1  # count function evaluations (we always make 1 try below)
     stepredn <- ctrl$stepredn
@@ -35,10 +34,10 @@ ncg <- function(par, fn, gr, bds, control = list()) {
     reltest <- 100  # relative equality test
     ceps <- .Machine$double.eps * reltest
     accpoint <- as.logical(FALSE)  # so far do not have an acceptable point
-    cyclimit <- min(2.5 * n, 10 + sqrt(n))  #!! upper bound on when we restart CG cycle
+    cyclimit <- min(2.5 * npar, 10 + sqrt(npar))  #!! upper bound on when we restart CG cycle
     # set default masks if not defined
     if (is.null(bds)) {
-        bdmsk <- rep(1, n)
+        bdmsk <- rep(1, npar)
     }
     else bdmsk <- bds$bdmsk
     bounds <- bds$bounds
@@ -68,7 +67,7 @@ ncg <- function(par, fn, gr, bds, control = list()) {
     cycle <- 0  # !! cycle loop counter
     ####################################################################
     while (keepgoing) { # main loop -- must remember to break out of it!!
-        t <- as.vector(rep(0, n))  # zero step vector
+        t <- as.vector(rep(0, npar))  # zero step vector
         c <- t  # zero 'last' gradient
         while (keepgoing && (cycle < cyclimit)) {    ## cycle loop
             cycle <- cycle + 1
@@ -100,7 +99,7 @@ ncg <- function(par, fn, gr, bds, control = list()) {
             if (bounds) { ## Bounds and masks adjustment of gradient ##
                   ## first try with looping -- later try to vectorize
                   if (trace > 2) { cat("bdmsk:"); print(bdmsk) }
-                  for (i in 1:n) {
+                  for (i in 1:npar) {
                     if ((bdmsk[i] == 0)) {  g[i] <- 0 }# masked: gradient component is zero
                     else {
                       if (bdmsk[i] == 1) {
@@ -177,7 +176,7 @@ ncg <- function(par, fn, gr, bds, control = list()) {
                 changed <- TRUE  # Need to set so loop will start
                 while ((f >= fmin) && changed) {
                   if (bounds) { # Box constraint -- adjust step length
-                      for (i in 1:n) { # loop on parameters -- vectorize??
+                      for (i in 1:npar) { # loop on parameters -- vectorize??
                         if ((bdmsk[i] == 1) && (t[i] != 0)) {
                             # only concerned with free parameters and non-zero search dimension
                             if (t[i] < 0) { # going down. Look at lower bound
@@ -224,7 +223,7 @@ ncg <- function(par, fn, gr, bds, control = list()) {
                     } 
                     else newstep <- 2*steplength # 20220627 try a doubling
                     if (bounds) { # Box constraint -- adjust step length
-                        for (i in 1:n) {  # loop on parameters -- vectorize??
+                        for (i in 1:npar) {  # loop on parameters -- vectorize??
                           if ((bdmsk[i] == 1) && (t[i] != 0)) {
                               # only concerned with free parameters and non-zero search dimension
                               if (t[i] < 0) { # going down. Look at lower bound
@@ -287,7 +286,7 @@ ncg <- function(par, fn, gr, bds, control = list()) {
             }  # end of test on Yuan/Dai condition
             #### End line search ####
             if (bounds) { ## Reactivate constraints?? -- should check for infinite bounds
-                 for (i in 1:n) {
+                 for (i in 1:npar) {
                     if (bdmsk[i] == 1) { # only interested in free parameters
                       if (is.finite(bds$lower[i])) { # JN091020 -- need to use abs in case bounds negative
                         if ((bvec[i] - bds$lower[i]) < ceps * (abs(bds$lower[i]) + 1)) {

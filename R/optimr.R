@@ -614,7 +614,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
          ## return(ans)
       }  ## end if using snewton
   ## --------------------------------------------
-  else if (method == "snewtonm") { # Use snewtonm routine
+  else if ((method == "snewtm") || (method=="snewtonm")) { # Use snewtm/snewtonm routine
     mcontrol$maxit <- control$maxit
     mcontrol$maxfeval <- control$maxfeval # changed from maxfevals 180321
     mcontrol$trace <- control$trace # 140902 Note no check on validity of values
@@ -684,7 +684,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
       }
     } # end have answer
     ## return(ans)
-  }  ## end if using snewtonm
+  }  ## end if using snewtm
   ## --------------------------------------------
       else if (method == "hjn") {# Use JN Hooke and Jeeves
         if (control$trace > 1) { 

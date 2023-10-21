@@ -7,25 +7,25 @@ ctrldefault <- function(npar) {
                 "lbfgsb3c", "Rcgmin", "Rtnmin", "Rvmmin", "snewton", "snewtonm",
                  "spg", "ucminf", "newuoa", "bobyqa", "uobyqa", "nmkb", "hjkb", 
                  "hjn", "lbfgs", "subplex", "ncg", "nvm", "mla", 
-                 "slsqp", "tnewt", "anms", "pracmanm", "nlnm")
+                 "slsqp", "tnewt", "anms", "pracmanm", "nlnm", "snewtm")
 
       truename <- c("BFGS", "CG", "Nelder-Mead", "L-BFGS-B", "nlm", "nlminb", 
                 "lbfgsb3c", "Rcgmin", "Rtnmin", "Rvmmin", "snewton", "snewtonm",
                  "spg", "ucminf", "newuoa", "bobyqa", "uobyqa", "nmkb", "hjkb", 
                  "hjn", "lbfgs", "subplex", "ncg", "nvm", "mla", 
-                 "slsqp", "tnewton", "anms", "nelder_mead", "neldermead")
+                 "slsqp", "tnewton", "anms", "nelder_mead", "neldermead", "snewtm")
 
 #  allpkg has package where element of allmeth is found
       allpkg <-  c("stats", "stats", "stats", "stats", "stats", "stats",
                 "lbfgsb3c", "optimx", "optimx", "optimx", "optimx", "optimx",
                 "BB", "ucminf", "minqa", "minqa", "minqa", "dfoptim", "dfoptim", 
                  "optimx", "lbfgs", "subplex", "optimx", "optimx", "marqLevAlg", 
-                 "nloptr", "nloptr", "pracma", "pracma", "nloptr")
+                 "nloptr", "nloptr", "pracma", "pracma", "nloptr", "optimx")
 
 ## These are DEFAULTS. They may be nonsense in some contexts.
 
       mostmeth <- c("Nelder-Mead", "nlm", "nlminb", 
-                "lbfgsb3c", "Rtnmin", "snewtonm",
+                "lbfgsb3c", "Rtnmin", "snewtm",
                  "spg", "ucminf", "bobyqa", "nmkb", 
                  "subplex", "ncg", "Rcgmin", "nvm", 
                  "Rvmmin", "mla", "slsqp", "tnewt",
@@ -40,7 +40,8 @@ ctrldefault <- function(npar) {
                  "spg", "ucminf", "lbfgs", "ncg", "nvm", "mla", 
                  "slsqp", "tnewt")
 
-     hessmeth <- c("nlm", "nlminb", "snewton", "snewtonm")
+     hessmeth <- c("nlm", "nlminb", "snewton", "snewtonm", "snewtm")
+# NOTE: snewtm and snewtonm are synonyms
 
 
 
@@ -75,7 +76,7 @@ ctrldefault <- function(npar) {
 
       bdmeth <- c("L-BFGS-B", "nlminb", "lbfgsb3c", "Rcgmin", "Rtnmin", "nvm",  
                 "Rvmmin", "bobyqa", "nmkb", "hjkb", "hjn", "snewtonm", "ncg", 
-                "slsqp", "tnewt", "nlnm")
+                "slsqp", "tnewt", "nlnm", "snewtm")
                  # snewtonmb added 20220210, removed 20230625 for snewtm
 
       bdmeth <- bdmeth[ which(bdmeth %in% OKmeth) ]

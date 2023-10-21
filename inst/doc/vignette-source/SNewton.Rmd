@@ -115,7 +115,7 @@ generally simpler yet still effective.
 
 ## Newton-Marquardt method
 
-A slightly different approach in the code `snewtonm` uses a Marquardt 
+A slightly different approach in the code `snewtm` (formerly `snewtonm`) uses a Marquardt 
 stabilization of the Hessian to create
 
   $$ H_{aug} = H + 1_n * lambda$$
@@ -134,6 +134,11 @@ Note that it is also possible to combine the Marquardt stabilization with a line
 search. Thus there is a multitude of possible methods in this general family, 
 which can lead to potential disagreements about which are "best" unless there
 is great care taken to ensure the methods under discussion are well-defined.
+
+In 2023, in concert with an effort related to other algorithms, a function `snewtm()`
+was created to be called ONLY via `optimr()`. That is, validity checks and other
+general steps in running an optimizer have been removed. `snewtonm()` was 
+removed at this time.
 
 # Computing the search vector
 
