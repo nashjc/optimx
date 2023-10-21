@@ -4,7 +4,6 @@ NEWS about R package optimx
 IMMEDIATE WORK TO DO
       o note n/npar in ncg
       o snewton/snewtm ?? check
-      o check pracmanm for maximize??
 
 CURRENT BUGS or ISSUES
       o summary.opm should display solution being C(onstrained) or U(nconstrained) and 
@@ -81,6 +80,9 @@ VERSION 2023-10-15
       o Fix unnecessary ",..." in call to L-BFGS-B in optimr(). The dot-args were 
         removed to avoid an argument collision (VERSION 2023-06-25) using a suggestion
         of Duncan Murdoch, but I forgot to remove this case.
+      o Duncan Murdoch proposed and suggested a patch to avoid termination by try(),
+        though failure is reported, and to attempt to give better error messages on 
+        cause of failure in such cases.
 
 VERSION 2023-09-01
       o Used Henrik Bengsston's R.rsp method to install static pdf vignettes as some
