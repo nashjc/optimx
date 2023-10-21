@@ -59,7 +59,7 @@ gHgen <- function(par, fn, gr = NULL, hess = NULL, control = list(ktrace=0),
     if (is.null(hess)) {
         if (is.null(gr)) {
             if (ctrl$ktrace>0) cat("is.null(gr) is TRUE use numDeriv hessian()\n") 
-            Hn <- try(hessian(fn, par, ...), silent = TRUE)  # change 20100711
+            Hn <- try(hessian(fn, par, ...), silent = FALSE)  # change 20100711
             if (inherits(Hn, "try-error")) {
                 if (ctrl$stoponerror) 
                   stop("Unable to compute Hessian using numDeriv::hessian")
@@ -69,7 +69,7 @@ gHgen <- function(par, fn, gr = NULL, hess = NULL, control = list(ktrace=0),
         }
         else {
             if (ctrl$ktrace>0) cat("is.null(gr) is FALSE use numDeriv jacobian()\n") 
-            Hn <- try(jacobian(gr, par, ...), silent = TRUE)  # change 20100711
+            Hn <- try(jacobian(gr, par, ...), silent = FALSE)  # change 20100711
             if (inherits(Hn, "try-error")) {
                 if (ctrl$stoponerror) 
                   stop("Unable to compute Hessian using numderiv::jacobian")
@@ -102,7 +102,7 @@ gHgen <- function(par, fn, gr = NULL, hess = NULL, control = list(ktrace=0),
     }
     else {
         if (ctrl$ktrace>0) cat("is.null(hess) is FALSE -- trying hess()\n") 
-        Hn <- try(hess(par, ...), silent = TRUE)  # change 20110222
+        Hn <- try(hess(par, ...), silent = FALSE)  # change 20110222
         if (inherits(Hn, "try-error")) {
             if (ctrl$stoponerror) 
                 stop("Hessian evaluation with function hess() failed")
