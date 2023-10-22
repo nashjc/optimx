@@ -55,7 +55,8 @@ NEWS from the optimx package
 
 Some comments apply to deprecated packages optimr on CRAN and optimrx on R-forge.
 
-VERSION 2023-10-15
+VERSION 2023-10-21
+      o ?? expand diagnostic for missing or unsuitable method(s)
       o Fix unnecessary ",..." in call to L-BFGS-B in optimr(). The dot-args were 
         removed to avoid an argument collision (VERSION 2023-06-25) using a suggestion
         of Duncan Murdoch, but I forgot to remove this case.
