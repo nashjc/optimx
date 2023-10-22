@@ -36,7 +36,7 @@ list(fval=fval, infeasible=infeasible, excode=excode, msg=msg)
   \item{excode}{An exit code, which has a relationship to }
   \item{msg}{A text string giving information about the result of the function check: Messages and
     the corresponding values of \code{excode} are:
-    \itemize{
+      \itemize{
         \item{fnchk OK;}{ \code{excode} = 0; 
                        \code{infeasible} = FALSE}
         \item{Function returns INADMISSIBLE;}
