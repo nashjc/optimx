@@ -76,7 +76,7 @@ ctrldefault <- function(npar) {
 
       bdmeth <- c("L-BFGS-B", "nlminb", "lbfgsb3c", "Rcgmin", "Rtnmin", "nvm",  
                 "Rvmmin", "bobyqa", "nmkb", "hjkb", "hjn", "snewtonm", "ncg", 
-                "slsqp", "tnewt", "nlnm", "snewtm")
+                "slsqp", "tnewt", "nlnm", "snewtm", "spg")
                  # snewtonmb added 20220210, removed 20230625 for snewtm
 
       bdmeth <- bdmeth[ which(bdmeth %in% OKmeth) ]

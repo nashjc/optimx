@@ -67,7 +67,7 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
         }
       }
   }
-  mti <- method
+  mti <- method #  -- fix ?? these checks have poor diagnostic output
   lmth <- length(method)
   
   method <- unique(method) # in case user has duplicates
@@ -76,8 +76,8 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
   if (length(method) < lmth)warning("Method requested NOT in available set allmeth")
 #  if (length(method) > 1) {
     if (control$have.bounds) { 
-      method <- intersect(method,bdmeth) 
-      if (length(method) < lmth) warning("method requested does not handle bounds")
+      method <- intersect(method,bdmeth) # ?? badmeth <- ??
+      if (length(method) < lmth) warning("A method requested does not handle bounds")
     }
     if ( is.null(hess) ) { # remove snewton and snewtonm when no hessian
       if ( "snewton" %in% method ) {

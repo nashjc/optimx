@@ -108,8 +108,6 @@
    \item{\code{checkbounds}}{= TRUE if we want bounds verified. Default is 
      TRUE.}
 
-    {The source code \code{Rcgmin} for R is likely to remain a work in progress 
-    for some time, so users should watch the console output.}
   }
 
   As of 2011-11-21 the following controls have been REMOVED
