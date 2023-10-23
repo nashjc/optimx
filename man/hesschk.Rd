@@ -49,7 +49,7 @@ analytic Hessian code returns a Hessian matrix that is "close" to the
 numerical approximation obtained via \code{numDeriv}; FALSE otherwise.
 
 \code{hessOK} is returned with the following attributes:
-\itemize{
+\describe{
      \item{"nullhess"}{Set TRUE if the user does not supply a function to compute the Hessian.}
      \item{"asym"}{Set TRUE if the Hessian does not satisfy symmetry conditions to
            within a tolerance. See the \code{hesschk} for details.}

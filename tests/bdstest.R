@@ -1,6 +1,6 @@
 # rm(list=ls())
 ##  author: John C. Nash
-# fname<-paste(format(Sys.time(), "%Y%m%d%H%M"),"-btRvmmin.out",sep='')
+# fname<-paste(format(Sys.time(), "%Y%m%d%H%M"),"-btnvm.out",sep='')
 # sink(fname, append=TRUE, split=TRUE)
 require("optimx")
 # Following is used when starting from opx21 directory
@@ -25,7 +25,7 @@ sessionInfo()
 #####################
 
 # This test script illustrates the use of bounds in optimr() with the
-# optimizers Rvmmin and L-BFGS-B, as well as a Kuhn Karush Tucker check 
+# optimizers nvm and L-BFGS-B, as well as a Kuhn Karush Tucker check 
 # on the final parameters from the second optimization.
 # Masks are tested at the very end for the two methods for which they are
 # available. Note that they must be called via the opm() function.
@@ -49,10 +49,10 @@ print(xx)
 cat("upper bounds:")
 print(upper)
 
-cat("Rvmmin \n\n")
+cat("nvm\n") # changed from Rvmmin 2023-10-22
 
 abtrvm <- optimr(xx, simfun.f, simfun.g, lower=lower, upper=upper, 
-        method="Rvmmin", control=list(trace=0))
+        method="nvm", control=list(trace=0))
 # Note: use lower=lower etc. because there is a missing hess= argument
 proptimr(abtrvm)
 
@@ -61,7 +61,7 @@ axabtrvm <- axsearch(abtrvm$par, fn=simfun.f, fmin=abtrvm$value, lower, upper, b
 print(axabtrvm)
 
 cat("Now force an early stop\n")
-abtrvm1 <- optimr(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="Rvmmin", 
+abtrvm1 <- optimr(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="nvm", 
                   control=list(maxit=1, trace=0))
 print(abtrvm1)
 cat("Axial search")
@@ -70,7 +70,7 @@ print(axabtrvm1)
 
 
 cat("Maximization test\n")
-mabtrvm <- optimr(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="Rvmmin", 
+mabtrvm <- optimr(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="nvm", 
                  control=list(trace=1, maximize=TRUE))
 # Note: use lower=lower etc. because there is a missing hess= argument
 print(mabtrvm)
@@ -93,9 +93,8 @@ alhn<-optimr(xx, simfun.f, lower=lower, upper=upper, method="hjn",
 print(alhn)
 
 #sink()
-cat("All bounded methods attempt with opm\n")
-
-allbds <- opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="ALL", control=list(trace=0))
+cat("All bounded methods attempt with opm\n") # ?? should give errors
+allbds <- opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="MOST", control=list(trace=0))
 print(summary(allbds, order=value))
 
 cat("Now force a mask upper=lower for parameter 3 and see what happens\n")
@@ -111,7 +110,7 @@ proptimr(ncgbdm)
 ##                  control=list(trace=1, watch=TRUE))
 ## proptimr(ncgbdm)
 
-allbdm <- try(opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="ALL", 
+allbdm <- try(opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method="MOST", 
                control=list(trace=2)))
 print(summary(allbdm, order=value))
 
@@ -120,7 +119,3 @@ allmsk <- try(opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method=mmth,
                   control=list(trace=2)))
 print(summary(allmsk, order=value))
 
-
-#?? fails, and ncg never stops
-#allbdm <- opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method=c("ncgqs"), control=list(trace=2))
-#allbdm

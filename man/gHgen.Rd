@@ -47,7 +47,7 @@
 }
 \value{
   \code{ansout} a list of four items, 
-  \itemize{
+  \describe{
       \item{\code{gn}}{  The approximation to the gradient vector.}
       \item{\code{Hn}}{  The approximation to the Hessian matrix.}
       \item{\code{gradOK}}{  TRUE if the gradient has been computed acceptably. FALSE otherwise.}

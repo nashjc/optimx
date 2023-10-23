@@ -1,30 +1,24 @@
 # maxtest.R
-##  author: John C. Nash
+##  author: John C. Nash -- revised 2023-10-21
 # rm(list=ls())
 cat("maxfn.R -- test that maximize=TRUE works correctly\n")
 
-##?? Notes Dec 2 2021
-
+## Notes Dec 2 2021
 ##?? When we are using grfwd, the sign of the gradient is wrong. Why??
-
 
 require(optimx)
 # source("optimx/tests/maxfn.R")
 source("maxfn.R")
 sessionInfo()
 
-
 n<-4
 xx<-rep(1,n) # start at all 1s
-
 rv0 <- Rvmmin(xx, maxfn, maxfn.g, control=list(maximize=TRUE, trace=2))
 rv0
 rv0f <- Rvmmin(xx, maxfn, "grfwd", control=list(maximize=TRUE, trace=2))
 rv0f
-
 nrv0 <- Rvmmin(xx, negmaxfn, negmaxfn.g, control=list(trace=4))
 nrv0
-
 nrv0f <- Rvmmin(xx, negmaxfn, "grfwd", control=list(trace=4))
 nrv0f
 
@@ -69,17 +63,13 @@ ansmaxnmbad2<-optimr(xx,negmaxfn, gr="grfwd", method="Nelder-Mead", control=list
 # THIS SHOULD FAIL UNBOUNDED ALSO
 proptimr(ansmaxnmbad2)
 # 
-# 
 # # Test Carlo Lapid suggested fix for optimr()  180313
-# 
 # amaxo<-optimr(xx, maxfn, method="L-BFGS-B", control=list(maximize=TRUE, trace=0))
 # proptimr(amaxo)
 # 
 # cat("using the negmax function should give same parameters\n")
 # anegmaxo<-optimr(xx,negmaxfn, method="L-BFGS-B", control=list(trace=0))
 # proptimr(anegmaxo)
-# 
-# 
 # 
 # cat("WARNING -- this example should FAIL\n")
 # cat("maximize=TRUE is NOT set up in hjn()\n")

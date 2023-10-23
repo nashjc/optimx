@@ -36,25 +36,25 @@ list(fval=fval, infeasible=infeasible, excode=excode, msg=msg)
   \item{excode}{An exit code, which has a relationship to }
   \item{msg}{A text string giving information about the result of the function check: Messages and
     the corresponding values of \code{excode} are:
-      \itemize{
+      \describe{
         \item{fnchk OK;}{ \code{excode} = 0; 
                        \code{infeasible} = FALSE}
-        \item{Function returns INADMISSIBLE;}
-                    { \code{excode} = -1; \code{infeasible} = TRUE}
-        \item{Function returns a vector not a scalar;}
-                    { \code{excode} = -4; \code{infeasible} = TRUE}
-        \item{Function returns a list not a scalar;}
-                    { \code{excode} = -4; \code{infeasible} = TRUE}
-        \item{Function returns a matrix list not a scalar;}
-                    { \code{excode} = -4; \code{infeasible} = TRUE}
-        \item{Function returns an array not a scalar;}
-                    { \code{excode} = -4; \code{infeasible} = TRUE}
-        \item{Function returned not length 1, despite not vector, matrix or array;}
-                    { \code{excode} = -4; \code{infeasible} = TRUE}
-        \item{Function returned non-numeric value; \code{excode} = 0;}
-                    { \code{excode} = -1; \code{infeasible} = TRUE}
-        \item{Function returned Inf or NA (non-computable);}
-                    { \code{excode} = -1; \code{infeasible} = TRUE}
+        \item{Function returns INADMISSIBLE;}{
+                     \code{excode} = -1; \code{infeasible} = TRUE}
+        \item{Function returns a vector not a scalar;}{
+                     \code{excode} = -4; \code{infeasible} = TRUE}
+        \item{Function returns a list not a scalar;}{
+                     \code{excode} = -4; \code{infeasible} = TRUE}
+        \item{Function returns a matrix list not a scalar;}{
+                     \code{excode} = -4; \code{infeasible} = TRUE}
+        \item{Function returns an array not a scalar;}{
+                     \code{excode} = -4; \code{infeasible} = TRUE}
+        \item{Function returned not length 1, despite not vector, matrix or array;}{
+                     \code{excode} = -4; \code{infeasible} = TRUE}
+        \item{Function returned non-numeric value; \code{excode} = 0;}{
+                     \code{excode} = -1; \code{infeasible} = TRUE}
+        \item{Function returned Inf or NA (non-computable);}{
+                     \code{excode} = -1; \code{infeasible} = TRUE}
     }
   }
 }
