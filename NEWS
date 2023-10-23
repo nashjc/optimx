@@ -45,11 +45,6 @@ TODOS ideas:
    o Needed to trap singular Hessian for snewton and snewtm ?? do we?
    o update check of maskmeth i.e., methods that can handle masks, esp for snewtonmb
 
-   Nelder-Mead and related methods: 
-   o McKinnon Nelder Mead test functions -- set them up -- no issue for 
-     Nelder-Mead, nmkb or anms, but optimr does NOT use McKinnon initial
-     polytope. ?? mention in Intro to optimx
-
 ===================================================================================
 NEWS from the optimx package
 
@@ -63,6 +58,8 @@ VERSION 2023-10-21
       o Duncan Murdoch proposed and suggested a patch to avoid termination by try(),
         though failure is reported, and to attempt to give better error messages on 
         cause of failure in such cases.
+      o Some minor corrections to simple typos and extraneous text.
+      o Added checks on valid methods in opm(), trap for bounded methods in optimr().
 
 VERSION 2023-09-01
       o Used Henrik Bengsston's R.rsp method to install static pdf vignettes as some

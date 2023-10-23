@@ -67,34 +67,43 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
         }
       }
   }
-  mti <- method #  -- fix ?? these checks have poor diagnostic output
-  lmth <- length(method)
-  
+  nmeth <- length(method)
   method <- unique(method) # in case user has duplicates
-  if (length(method) < lmth) warning("Duplicate methods requested -- rendered unique")
-  method <- intersect(method, allmeth)
-  if (length(method) < lmth)warning("Method requested NOT in available set allmeth")
-#  if (length(method) > 1) {
-    if (control$have.bounds) { 
-      method <- intersect(method,bdmeth) # ?? badmeth <- ??
-      if (length(method) < lmth) warning("A method requested does not handle bounds")
-    }
-    if ( is.null(hess) ) { # remove snewton and snewtonm when no hessian
-      if ( "snewton" %in% method ) {
+  if (length(method) < nmeth) warning("Duplicate methods requested by user removed")
+  nmeth <- length(method) # reset after dedup
+  dmeth <- setdiff(method, allmeth)
+  if (length(dmeth) > 0) { 
+     cat("Invalid methods requested:"); print(dmeth)
+     stop("Method(s) requested NOT in available set")
+  }
+  if (control$have.bounds) { 
+      dmeth<-setdiff(method, bdmeth)
+      if (length(dmeth) > 0) {
+        cat("Non-bounds methods requested:"); print(dmeth)
+        warning("A method requested does not handle bounds")
+      }
+      method <- intersect(method, bdmeth) # to remove non-bounds methods
+  }
+  if ( is.null(hess) ) { # remove snewton and snewtonm when no hessian
+     if ( "snewton" %in% method ) {
            method <- method[-which(method == "snewton")]
            warning("'snewton' removed from 'method' -- no hess()")
       }
-      if ( "snewtonm" %in% method ) {
+      if ("snewtonm" %in% method) {
            method <- method[-which(method == "snewtonm")]
            warning("'snewtonm' removed from 'method' -- no hess()")
       }
-    }
-#  }
+      if ("snewtm" %in% method) {
+           method <- method[-which(method == "snewtm")]
+           warning("'snewtm' removed from 'method' -- no hess()")
+      }
+   }
   # 20220221: fixup for methods NOT suitable for bounds
-  method <- unlist(method) # ?? needed?
-  if (control$have.bounds) method <- method[which(method %in% bdmeth)]
+#  method <- unlist(method) # ?? needed?
+#  if (control$have.bounds) method <- method[which(method %in% bdmeth)]
+ 
   # end fixup
-  nmeth <- length(method)
+  nmeth <- length(method) # in case methods removed
   if (nmeth < 1) stop("No suitable methods requested for opm()")
 
   if (is.null(pstring)) {

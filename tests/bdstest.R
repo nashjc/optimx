@@ -119,3 +119,5 @@ allmsk <- try(opm(xx, simfun.f, simfun.g, lower=lower, upper=upper, method=mmth,
                   control=list(trace=2)))
 print(summary(allmsk, order=value))
 
+# Check unsuitable method trap
+try(optimr(xx, simfun.f, simfun.g, method="ucminf", lower=lower, upper=upper))

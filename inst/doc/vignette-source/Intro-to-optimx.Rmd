@@ -153,6 +153,13 @@ or are experimental, so replete with weaknesses or errors. Part of the goal of
 the package is to allow for testing and comparison of solvers, and to allow their
 improvement.
 
+The `optimr()` function does not always allow the full set of features of the
+individual solvers, and modifications may not be easy. For example, Nelder-Mead
+polytope methods require a starting polytope. This is generally created by simple
+axial steps from a starting point. However, alternative choices are possible, 
+though not offered in `optimr()` that could perform better on some problems such
+as the special cases proposed by @McKinnon1998.
+
 ### An example
 
 ```{r sqmod}

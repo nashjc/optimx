@@ -68,6 +68,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
 #      par <- bdmsk$bvec
 #  }
   control$have.bounds <- bdmsk$bounds # and set a control value
+  if (control$have.bounds && !(method %in% control$bdmeth)) stop("Bounded problem with unsuitable method")
 
   orig.method <- method
   if (!is.null(gr) && !is.character(gr)) { orig.gr <- gr1 } else {orig.gr <- gr }
@@ -1388,7 +1389,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
          }
       }  ## end if using tnewton
 ## --------------------------------------------
-  else if (method == "anms") {# Use unconstrained method from marqLevAlg
+  else if (method == "anms") {# Use nelder-mead method from pracma
       if (control$trace > 1) cat("anms\n")
       # Following seems to be needed to avoid unwanted output
       #  if (control$trace < 1) {invisible <- 1} else {invisible <- 0}
