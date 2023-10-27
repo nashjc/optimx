@@ -279,10 +279,11 @@ ncg <- function(par, fn, gr, bds, control = list()) {
                 else { # not changed on step redn
                   if (cycle == 1) { msg <- " Converged -- no progress on new CG cycle"
                     if (trace > 0) cat("\n", msg, "\n")
-                    keekpgoing <- FALSE
+                    keepgoing <- FALSE
                     break  #!!
                   }
                 }  # end else
+#               if (! keepgoing) break # 2023-10-27 to exit
             }  # end of test on Yuan/Dai condition
             #### End line search ####
             if (bounds) { ## Reactivate constraints?? -- should check for infinite bounds
@@ -305,12 +306,14 @@ ncg <- function(par, fn, gr, bds, control = list()) {
                     }  # end test on free params
                  }  # end reactivate constraints
             }  # end if bounds
+#            if (! keepgoing) break # 2023-10-27 to exit
         }  # end of inner loop (cycle)
         if (oldstep < acctol) {
             oldstep <- acctol
         }  #   steplength
         if (oldstep > 1) { oldstep <- 1 } # Force no bigger than 1
         if (trace > 1) cat("End inner loop, cycle =", cycle, "\n")
+#        if (! keepgoing) break # 2023-10-27 to exit
     }  # end of outer loop
     msg <- "ncg seems to have converged"
     if (trace > 0) cat(msg, "\n")

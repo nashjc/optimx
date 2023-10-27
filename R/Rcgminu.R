@@ -325,7 +325,7 @@ Rcgminu <- function(par, fn, gr, control = list(), ...) {
                     msg <- " Converged -- no progress on new CG cycle"
                     if (trace > 0) 
                       cat("\n", msg, "\n")
-                    keekpgoing <- FALSE
+                    keepgoing <- FALSE
                     break  #!!
                   }
                 }  # end else
