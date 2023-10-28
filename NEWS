@@ -14,7 +14,6 @@ CURRENT BUGS or ISSUES
       o We will NOT add ipoptr until non-standard install is fixed up.
 
 TODOS ideas:
-   o    ncg / Rcgminu / Rcgminb -- typo in keepgoing (keekpgoing) to fix.
    o    demo() should be cleaner
    o    On failure of method, what should be returned? Could current optimr result in
         such cases be improved?
@@ -50,6 +49,11 @@ TODOS ideas:
 NEWS from the optimx package
 
 Some comments apply to deprecated packages optimr on CRAN and optimrx on R-forge.
+
+VERSION 2023-10-27
+   o    ncg / Rcgminu / Rcgminb -- typo in keepgoing (keekpgoing) to fix.
+   o    added opm2optimr and manual file for extracting single solver result
+        from opm() output object
 
 VERSION 2023-10-21
       o Expand diagnostic for missing or unsuitable method(s)

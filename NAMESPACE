@@ -33,6 +33,7 @@ export(
   "ncg",
   "nvm",
   "opm",
+  "opm2optimr",
   "optchk",
   "optimr",
   "optimx",
