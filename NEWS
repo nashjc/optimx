@@ -51,7 +51,7 @@ NEWS from the optimx package
 Some comments apply to deprecated packages optimr on CRAN and optimrx on R-forge.
 
 VERSION 2023-10-27
-   o    ncg / Rcgminu / Rcgminb -- typo in keepgoing (keekpgoing) to fix.
+   o    ncg / Rcgminu / Rcgminb -- typo in keepgoing (was keekpgoing) fixed.
    o    added opm2optimr and manual file for extracting single solver result
         from opm() output object
 
