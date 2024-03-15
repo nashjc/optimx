@@ -168,10 +168,15 @@ simfun.h = function(x) {
      hess<-diag(t)
 }
 
+# library(optimx) ## May be needed for independent running.
 strt <- c(1,2,3)
 ansfgh <- optimr(strt, simfun.f, simfun.g, simfun.h, method="nlm",
      hessian=TRUE, control=list(trace=2))
 proptimr(ansfgh) # compact output of result
+cat("nlm does not return good counts\n")
+cat("ansfgh$counts:")
+print(ansfgh$counts)
+
 
 
 }

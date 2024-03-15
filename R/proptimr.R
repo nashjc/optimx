@@ -12,6 +12,7 @@ proptimr <- function(opres){
   outpar<-""
   for (i in 1:n) cat(opres$par[i],schar[i],"  ")
   cat("\n")
+  # Note we use "counts" if "scounts" not available
   if (is.null(opres$scounts)){ nfn <- opres$counts[[1]];   ngr <- opres$counts[[2]]; nhe <- NA}
   else {nfn <- opres$scounts[1]; ngr <- opres$scounts[2]; nhe <- opres$scounts[3] }
   cat("After ",nfn," fn evals, and ",ngr," gr evals and ",nhe," hessian evals\n")

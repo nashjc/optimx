@@ -4,8 +4,6 @@ NEWS about R package optimx
 CURRENT BUGS or ISSUES
       o summary.opm should display solution being C(onstrained) or U(nconstrained) and 
 	    parameter status like proptimr(). C and U are attributes of "value". 
-      o Put counters in efn, egr, ehess -- at least as a commented template using optsp
-        environment. These are NOT output by all methods.
       o Look at masks for all methods using bdmsk elements 0 -- this would be
 	    in optimr(). Could it be effected via the gradient??
       o Can we report "known" answers for different test functions?
@@ -48,7 +46,13 @@ TODOS ideas:
 ===================================================================================
 NEWS from the optimx package
 
-Some comments apply to deprecated packages optimr on CRAN and optimrx on R-forge.
+VERSION 2024-03-15
+   o    Put counters in efn, egr, ehess. Counters are  optsp$kfn, optsp$kgr,
+		and optsp$khe in the special environment optsp created by zzz.R.
+        These are NOT output by all methods.
+
+Some comments apply to deprecated packages optimr on CRAN, github.com/nashjc/optimx
+	    and optimrx on R-forge.
 
 VERSION 2023-10-27
    o    ncg / Rcgminu / Rcgminb -- typo in keepgoing (was keekpgoing) fixed.
