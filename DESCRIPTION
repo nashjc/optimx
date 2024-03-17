@@ -21,6 +21,8 @@ Description: Provides a replacement and extension of the optim()
     Many methods previously separate are now included here.
     This is the version for CRAN.
 License: GPL-2
+URL: https://github.com/nashjc/optimx
+BugReports: https://github.com/nashjc/optimx/issues
 LazyLoad: Yes
 Imports: numDeriv, nloptr, pracma
 NeedsCompilation: no
