@@ -101,7 +101,7 @@ the method terminates.
   \item{maxit}{A limit on the number of iterations (default 500 + 2*n where n is
      the number of parameters). This is the maximum number of gradient evaluations 
      allowed.}
-  \item{maxfevals}{A limit on the number of function evaluations allowed 
+  \item{maxfeval}{A limit on the number of function evaluations allowed
      (default 3000 + 10*n).}
   \item{trace}{Set 0 (default) for no output, > 0 for diagnostic output
      (larger values imply more output).}
