@@ -1141,6 +1141,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
  ## Need to check these carefully. Changed 20191202 for lbfgsb3c !!?
             ans$par <- ans$par*pscale
             ans$niter <- NULL # loss of information
+            if (is.na(ans$convergence)){ ans$convergence <- 9995 }
          } else {
             if (control$trace>0) cat("lbfgsb3c failed for current problem \n")
             ans<-list(fevals=NA) # ans not yet defined, so set as list
@@ -1150,7 +1151,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
             ans$counts[1] <- NA
             ans$counts[1] <- NA
          }
-         ## return(ans)
+         return(ans)
       }  ## end if using lbfgsb3c
 ## --------------------------------------------
       else if (method == "lbfgs") {# Use unconstrained method from lbfgs package

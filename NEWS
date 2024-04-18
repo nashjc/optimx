@@ -47,6 +47,10 @@ TODOS ideas:
 NEWS from the optimx package
 
 VERSION 2024-03-15
+   o    Check that ans$convergence is defined for lbfgsb3c in optimr(). If NA,
+	        then set ans$convergence to 9995
+
+VERSION 2024-03-15
    o    Put counters in efn, egr, ehess. Counters are  optsp$kfn, optsp$kgr,
 		and optsp$khe in the special environment optsp created by zzz.R.
         These are NOT output by all methods.
