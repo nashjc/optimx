@@ -84,6 +84,14 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
       }
       method <- intersect(method, bdmeth) # to remove non-bounds methods
   }
+  if (control$have.masks) { 
+      dmeth<-setdiff(method, maskmeth)
+      if (length(dmeth) > 0) {
+        cat("Non-mask methods requested:"); print(dmeth)
+        warning("A method requested does not handle masks")
+      }
+      method <- intersect(method, maskmeth) # to remove non-masks methods
+  }
   if ( is.null(hess) ) { # remove snewton and snewtonm when no hessian
      if ( "snewton" %in% method ) {
            method <- method[-which(method == "snewton")]

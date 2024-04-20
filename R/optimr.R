@@ -1151,7 +1151,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
             ans$counts[1] <- NA
             ans$counts[1] <- NA
          }
-         return(ans)
+#         return(ans)
       }  ## end if using lbfgsb3c
 ## --------------------------------------------
       else if (method == "lbfgs") {# Use unconstrained method from lbfgs package
