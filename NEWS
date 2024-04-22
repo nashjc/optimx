@@ -2,6 +2,7 @@ NEWS about R package optimx
 
 =========== ONGOING CONCERNS =============
 CURRENT BUGS or ISSUES
+      o control$parscale needs documentation and example
       o summary.opm should display solution being C(onstrained) or U(nconstrained) and 
 	    parameter status like proptimr(). C and U are attributes of "value". 
       o Look at masks for all methods using bdmsk elements 0 -- this would be
