@@ -5,9 +5,7 @@ CURRENT BUGS or ISSUES
 <<<<<<< HEAD
       o As revealed by nonlinear equations work (dsltest.R), spg checkGrad controls
         in opm() seem to be ignored
-=======
       o control$parscale needs documentation and example
->>>>>>> 26f561d02bd64f853b392d1097d0225a47e21239
       o summary.opm should display solution being C(onstrained) or U(nconstrained) and 
 	    parameter status like proptimr(). C and U are attributes of "value". 
       o Look at masks for all methods using bdmsk elements 0 -- this would be
