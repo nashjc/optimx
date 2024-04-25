@@ -411,8 +411,12 @@ full Hessian or inverse Hessian, but instead to keep only a few of the vectors
 of information needed to create them via the updating formulas. The details 
 require care and attention. Moreover, all the "work" of these codes is 
 programmed in languages other than R. They are particularly helpful for problems
-with large numbers of parameters. In the example below, warnings about the lack
+with large numbers of parameters such as the variable dimension problem number
+25 of @More1981TUO. In the example below, warnings about the lack
 of symmetry of the returned Hessian are suppressed.
+
+
+
 
 ```{r manypar}
 # example using var_dim function from More et al. (or funconstrain)
@@ -447,6 +451,10 @@ res1<-opm(x0, bfn, bgr, method=mm)
 options(warn = defaultW)
 res1[,100:108]
 ```
+
+## Acknowledgement
+
+
 
 ## References
 
