@@ -41,6 +41,8 @@ The official optimx package is on CRAN.
 
 https://cran.r-project.org/
 
+of which a copy is here on github.com/nashjc/.
+
 A test version has been on R-forge in the optimizer package for some time, 
 but there have been concerns that R-forge is not up to date:
 
