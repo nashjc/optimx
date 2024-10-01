@@ -130,7 +130,7 @@ A separate categorization describes which methods allow bounds constraints.
 "snewtm", and "spg" provide for such constraints. Some, but not all, of these
 will allow upper and lower bounds on some parameters to be equal, thereby fixing a parameter
 or establishing a "mask". This can be very useful for situations where a parameter has
-a generally accepted value and we choose not to try to optimizat over it. Later the
+a generally accepted value and we choose not to try to optimize over it. Later the
 constraint can be relaxed. In particular "ncg" and "nvm" have been set up to explicitly
 handle masks.
 
