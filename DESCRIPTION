@@ -9,9 +9,6 @@ Authors@R: c( person(given = c("John", "C"), family = "Nash", role =
     "Borchers", role = "ctb", email =  "hwborchers@gmail.com"),  
     person(given = "Gabor", family = "Grothendieck", role = "ctb", email =
     "ggrothendieck@gmail.com") )
-Author: John C Nash [aut, cre],
-  Ravi Varadhan [aut],
-  Gabor Grothendieck [ctb]
 Maintainer: John C Nash <nashjc@uottawa.ca>
 Description: Provides a replacement and extension of the optim()
     function to call to several function minimization codes in R in a single
