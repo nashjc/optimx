@@ -1,52 +1,199 @@
 # optimx
 
-optimx is an R package that extends and enhances the optim() function of base R. 
+optimx is an R package that extends and enhances the optim() function of base R,
+in particular by unifying the call to many solvers.
 This Gitlab project has been established to document optimx and its development.
 A more detailed history of the package is given after the links to it.
 
-## Purpose
+  - Next an extensive, but clear table of all the methods that are available.
+     gradients or not, bounds constraints, etc.
 
-There are many function minimization and optimization packages associated with R.
-Generally, "optimization" includes constraints, but in the current context we
-use it to mean function minimization or maximization with at most bounds 
-constraints. We discuss all problems as minimizations, though the tools generally
-offer a setting to maximize a function.
-Unfortunately, each may have particular syntax and other requirements. Thus the
-primary purpose of optimx, and in particular the optimr() function within the 
-package, is intended to allow a common calling syntax. In large measure, this 
-syntax mirrors that of the base-R optim() function. For that reason, some features 
-of the solvers callable by optimx may not be available with optimr().
+  - What are masks and how to use them.
+ 
+  - Avoid mystic hints such as "the older solvers have been left available".
 
-A second goal of optimx is, via the function opm(), to allow multiple solvers to
-be called via a single statement so that their performance may be compared. When
-a user has a task that will be repeated frequently, this permits a reasonable 
-choice of efficient solver for the problem at hand. Some users have thought to
-use opm() generally with all, or many, of the available solvers, choosing the
-"best" solution after the fact. This is INEFFICIENT, WASTEFUL, and strongly
-DISCOURAGED.
+  - I am unsure what to do with the "categorization" section. It is long and
+     intertwined and not really understandable even for me.
 
-A third role of optimx is to provide several solvers and some infrastructure
-tools for function minimization. These were previously available in packages
-Rvmmin, Rcgmin, Rtnmin and optextras. However, the overhead of updating each
-of these packages separately became overly burdensom for the maintainer, and
-now all these features are included within optimx. We urge developers of other
-packages that called the separate tools to adjust their code to call optimx. 
-This is largely a matter of simply adjusting require() or library() entries 
-or similar simple changes.
+My advice would be: Leave out everything that is more or less presented in
+detail in one of the vignettes. The README shall enable the reader to make 
+use of the package quickly and correctly.
 
 
-## Where to find optimx
+## Installation
 
-The official optimx package is on CRAN. 
+From within R, the command 
 
-https://cran.r-project.org/
+    install.packages("optimx")
 
-of which a copy is here on github.com/nashjc/.
+will install the optimx from the CRAN repository https://cran.r-project.org/
 
-A test version has been on R-forge in the optimizer package for some time, 
-but there have been concerns that R-forge is not up to date:
+of which a copy is here on github.com/nashjc/. Thus if the devtools package is
+installed in R on your computer, you can issue the commands
 
-https://r-forge.r-project.org/R/?group_id=395
+    library("devtools")
+    install_github("nashjc/optimx")
+
+The test version of optimx on R-forge in the optimizer project 
+(https://r-forge.r-project.org/R/?group_id=395) is now deprecated.
+
+## Main functions in optimx
+
+### optimr()
+
+optimr() allows any of the solvers linked to the package to be called via the call
+
+  result <- optimr(par, fn, gr, hess, method="a_solver", lower=lo, upper=up)
+          
+where
+  - par is a vector of the initial parameter values for the function
+  - fn is the objective function to be minimized
+  - gr is a function to compute the gradient of fn (or NULL if none is provided)
+  - hess is a function to compute the hessian of fn (or NULL if gr=NULL or none is provided)
+  - method provides the name of the solver, here given a token name
+  - lower and upper provide bounds on the parameters for solvers that can use them
+
+See the man page for other arguments that allow various controls or extra features.
+
+### opm()
+
+opm() allows multiple solvers to
+be called via a single statement so that their performance may be compared.
+It is INEFFICIENT, WASTEFUL, and strongly DISCOURAGED to use opm() as a 
+general-purpose optimization tool. The call is similar to that of optimr()
+but method is now a vector of names of solvers. See the man page for more
+details.
+
+Usage:
+
+result<-opm(par, fn, gr, hess, lower=lo, upper=up, method=c("solver1", "solver2", "solver3"))
+
+with arguments as for optimr() except for method, which is now a vector of character names.
+
+## Solvers provided within the optimx package
+
+The package contains several solver functions. See specific man pages for details.
+
+ - ncg() is a conjugate gradient minimizer based on the Dai/Yuan approach. 
+ - Rcgmin() is an earlier implementation of ncg() which may give slightly different results and
+   is provided to maintain backward compatibility. 
+ - Rcgminb() is the bounds-constrained code called by Rcgmin()
+ - Rcgminu() is the unconstrained  code called by Rcgmin()
+ - nvm() is a Fletcher variable metric minimizer similar to the 'BFGS' method of optim()
+   (also available via optimr())
+ - Rvmmin() is an earlier implementation of nvm() which may give slightly different results and
+   is provided to maintain backward compatibility.
+ - Rvmminb() is the bounds-constrained code called by Rvmmin()
+ - Rvmminu() is the unconstrained  code called by Rvmmin()
+ - snewtm() is a didactic safeguarded Newton method with a Marquardt stabilization of the Hessian
+ - snewton() is a didactic safeguarded Newton method with a backtracking line search
+ - tn() is an unconstrained truncated Newton method of Stephen Nash
+ - tnbc() is a bounds-constrained truncated Newton method of Stephen Nash
+ - Rtnmin-package contains functions needed by tn() or tnbc()
+ - hjn() is a didactic implementation of the Hooke and Jeeves pattern search
+
+## Solvers available from other packages
+
+ - anms: Adaptive Nelder-Mead minimization (Gao/Han), from pracma package
+ - BFGS: optim() Fletcher variable metric minimizer 
+ - bobyqa: Powell's bounded optimization by quadratic approximation, from minqa package
+ - CG: optim() conjugate gradient minimizer (use is strongly discouraged as it performs poorly)
+ - hjkb: Hooke and Jeeves derivative-free minimization with bounds constraints, from dfoptim package
+ - lbfgs: Low-storage BFGS minimizer, from nloptr package
+ - L-BFGS-B: optim() version of limited memory BFGS minimizer with bounds (Byrd et al., 1995)
+ - lbfgsb3c: 2011 update of L-BFGS-B
+ - mla: A parallelized general-purpose optimization based on Marquardt-Levenberg algorithm
+ - Nelder-Mead: optim() version of the Nelder-Mead polytope (simplex) minimization
+ - newuoa: Unconstrained optimization by quadratic approximation, from minqa package
+ - nlm: Minimization via a Newton-like method
+ - nlminb: Unconstrained and bounds-constrained minimization via several algorithms (Gay, 1990)
+ - nlnm: Nelder-Mead minimization as implemented in package nloptr, with bounds applied by moving
+   parameters to nearest bound
+ - nmkb:  Nelder-Mead minimization as implemented in package dfoptim, using a transformation to
+   enforce bounds
+ - pracmanm: Nelder-Mead minimization as implemented in package pracma
+ - slsqp: Sequential quadratic programming, from package nloptr
+ - spg: Spectral projected gradient minimization, from package BB
+ - subplex: An extension of ideas of Nelder-Mead, from package subplex
+ - tnewt: Truncated Newton minimization, from package nloptr
+ - ucminf: A variable metric minimizer, from package ucminf
+ - uobyqa: Unconstrained optimization by quadratic approximation, from minqa package
+
+## Adding solvers
+
+It is relatively easy to modify optimr.R and ctrldefault.R to add a new solver. See the vignette
+"Using and extending the optimx package" (file Extend-optimx.pdf).
+
+## Additional functions within optimx
+
+The following files provide tools to support the use of the optimx package
+and other optimization tasks. See the man pages for details on usage.
+
+- axsearch.R: Perform axial search around a supposed minimum and provide diagnostics
+- bmchk.R: Check bounds and masks for parameter constraints
+- bmstep.R: Compute the maximum step along a search direction in presence of bounds
+- checksolver.R: Test if requested solver is present
+- ctrldefault.R: Set control defaults
+- fnchk.R: Run tests, where possible, on user objective function
+- gHgen.R: Generate gradient and Hessian for a function at given parameters
+- gHgenb.R: Generate gradient and Hessian for a function at given parameters (with bounds constraints)
+- grchk.R: Run tests, where possible, on user objective function and (optionally) gradient and hessian
+- grback.R: Backward difference numerical gradient approximation
+- grcentral.R: Central difference numerical gradient approximation 
+- grfwd.R: Forward difference numerical gradient approximation
+- grnd.R: A reorganization of the call to numDeriv grad() function
+- grpracma.R: A reorganization of the call to the pracma grad() function
+- hesschk.R: Run tests, where possible, on user objective function and (optionally) gradient and hessian
+- kktchk.R: Check Kuhn Karush Tucker conditions for a supposed function minimum
+- multistart.R: Allows for multiple sets of optimization starting parameters to be tried in a single call
+- opm2optimr.R: Extract optim() solution for one method of opm() result
+- optimx.R: The original optimx() function from 2010 for backward compatibility. This calls optimx.setup(),
+  optimx.check() and optimx.run().
+- polyopt.R: Allows solvers to be applied sequentially, with control limits on computational effort for
+  each solver
+- proptimr.R: Compact display of an optimr() result object 
+- scalechk.R: Check scale of initial parameters and bounds supplied for an optimization problem 
+- optchk.R: Attempts to check user-supplied objective function (optionally also gradient and hessian)
+- optimx-package.R: Provides local versions of summary() and coef() functions and some other code.
+- zzz.R: Startup actions. At time of writing, used for tn() and tnbc().
+
+## Solver characteristics
+
+| solver |  source  |  gradient |  hessian | bounds |
+| anms   |          |           |          |        |
+| BFGS   |          |           |          |        |
+| bobyqa   |          |           |          |        |
+| CG   |          |           |          |        |
+| hjkb   |          |           |          |        |
+| hjn   |          |           |          |        |
+| lbfgs   |          |           |          |        |
+| L-BFGS-B   |          |           |          |        |
+| lbfgsb3c   |          |           |          |        |
+| mla   |          |           |          |        |
+| ncg   |          |           |          |        |
+| Nelder-Mead   |          |           |          |        |
+| newuoa   |          |           |          |        |
+| nlm   |          |           |          |        |
+| nlminb   |          |           |          |        |
+| nlnm   |          |           |          |        |
+| nmkb   |          |           |          |        |
+| nvm   |          |           |          |        |
+| pracmanm   |          |           |          |        |
+| Rcgmin   |          |           |          |        |
+| Rtnmin   |          |           |          |        |
+| Rvmmin   |          |           |          |        |
+| slsqp   |          |           |          |        |
+| snewtm   |          |           |          |        |
+| snewton   |          |           |          |        |
+| snewtonm   |          |           |          |        |
+| spg   |          |           |          |        |
+| subplex   |          |           |          |        |
+| tnewt   |          |           |          |        |
+| ucminf   |          |           |          |        |
+| uobyqa   |          |           |          |        |
+
+
+
 
 ## History of optimx
 
@@ -87,61 +234,5 @@ As and when it is sensible to do so, the subsumed packages will be archived.
 Note that some development versions of packages remain on R-forge. Use of these 
 is at your own risk. 
 
-## Categorization of solvers
-
-It is helpful to have a general overview of the solvers available in optimx.
-
-Possibly the most important consideration is whether the solvers require or
-assume that gradients are available, or whether we may describe the solver
-as a direct search. Note that numerical derivatives do allow gradient or 
-Newton-like methods to be applied without explicit code for the gradient
-or Hessian. However, this is often inefficient, though timings can be useful
-to help choose appropriate solvers.
-
-The solvers that do not require gradients are named "Nelder-Mead", "newuoa", 
-"bobyqa", "uobyqa", "nmkb", "hjkb", "hjn", "subplex", "anms", "pracmanm", and "nlnm".
-Several of these are variants on the Nelder-Mead polytope (or simplex) search. 
-The Powell methods that use an "approximate and descend" approach are "newuoa", 
-"bobyqa", and "uobyqa". However, it has recently been reported that these may
-have bugs. See T. M. Ragonneau and Z. Zhang, PDFO: a cross-platform package for 
-Powell's derivative-free optimization solvers, arXiv:2302.13246, 2023
-
-Of methods that require gradients, those using ideas from Newton's method 
-require storage of some approximation to the Hessian. Methods that can use
-an explicit Hessian are "nlm", "nlminb", "snewton", "snewtonm", and "snewtm".
-The last three require the Hessian and are mainly didactic or experimental.
-The other two can use an explicit Hessian but do not require it. Timings are
-recommended to decide on usage details. 
-
-Clever ideas to approximate the Hessian without explicit calculation of it may
-still require storage for the matrix. When the problem dimension is large, there
-may be memory implications, though modern computers generally have plenty of 
-fast memory. "BFGS", "nlm", "nlminb", "Rvmmin", "ucminf", "nvm", "mla", and
-"slsqp" use explicit storage of an approximate Hessian.
-
-Avoiding the explicit matrix for the approximate Hessian leads to methods that
-are called "limited memory" or "conjugate gradient" or "truncated Newton" methods.
-"CG", "L-BFGS-B", "lbfgsb3c", "Rcgmin", "Rtnmin", "spg", "lbfgs", "ncg", and "tnewt"
-fall in this category.
-
-A separate categorization describes which methods allow bounds constraints.
-"L-BFGS-B", "nlminb", "lbfgsb3c", "Rcgmin", "Rtnmin", "nvm", 
-"Rvmmin", "bobyqa", "nmkb", "hjkb", "hjn", "snewtonm", "ncg", "slsqp", "tnewt", "nlnm", 
-"snewtm", and "spg" provide for such constraints. Some, but not all, of these
-will allow upper and lower bounds on some parameters to be equal, thereby fixing a parameter
-or establishing a "mask". This can be very useful for situations where a parameter has
-a generally accepted value and we choose not to try to optimize over it. Later the
-constraint can be relaxed. In particular "ncg" and "nvm" have been set up to explicitly
-handle masks.
-
-Note that some solvers are updated versions of existing codes. "nvm" updates "Rvmmin" and "ncg"
-updates "Rcgmin", though there are some situations where the older codes appear to perform
-better. Moreover, users can get upset if tests do not reproduce earlier results, so the older
-solvers have been left available. 
-
-## Adding solvers
-
-It is relatively easy to modify optimr.R and ctrldefault.R to add a new solver. See the vignette
-"Using and extending the optimx package" (file Extend-optimx.pdf).
 
 ### Updated 2024-10-01

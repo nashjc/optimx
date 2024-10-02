@@ -1,11 +1,11 @@
 \name{grpracma}
 \alias{grpracma}
 \encoding{UTF-8}
-\title{A reorganization of the call to numDeriv grad() function.}
+\title{A reorganization of the call to the pracma grad() function.}
 \concept{minimization}
 \concept{maximization}
 \description{
-        Provides a wrapper for the numDeriv approximation to the
+        Provides a wrapper for the pracma package approximation to the
         gradient of a user supplied objective function \code{userfn}.
 }
 \usage{
@@ -17,7 +17,7 @@
  \item{...}{Other data needed to evaluate the user function.}
 }
 \details{
-  The Richardson method is used in this routine.
+  A central difference approximation is used in this routine.
 }
 \value{
   \code{grpracma} returns an approximation to the gradient of the function userfn
