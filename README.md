@@ -159,38 +159,42 @@ and other optimization tasks. See the man pages for details on usage.
 
 ## Solver characteristics
 
-| solver |  source  |  gradient |  hessian | bounds |
-| anms   |          |           |          |        |
-| BFGS   |          |           |          |        |
-| bobyqa   |          |           |          |        |
-| CG   |          |           |          |        |
-| hjkb   |          |           |          |        |
-| hjn   |          |           |          |        |
-| lbfgs   |          |           |          |        |
-| L-BFGS-B   |          |           |          |        |
-| lbfgsb3c   |          |           |          |        |
-| mla   |          |           |          |        |
-| ncg   |          |           |          |        |
-| Nelder-Mead   |          |           |          |        |
-| newuoa   |          |           |          |        |
-| nlm   |          |           |          |        |
-| nlminb   |          |           |          |        |
-| nlnm   |          |           |          |        |
-| nmkb   |          |           |          |        |
-| nvm   |          |           |          |        |
-| pracmanm   |          |           |          |        |
-| Rcgmin   |          |           |          |        |
-| Rtnmin   |          |           |          |        |
-| Rvmmin   |          |           |          |        |
-| slsqp   |          |           |          |        |
-| snewtm   |          |           |          |        |
-| snewton   |          |           |          |        |
-| snewtonm   |          |           |          |        |
-| spg   |          |           |          |        |
-| subplex   |          |           |          |        |
-| tnewt   |          |           |          |        |
-| ucminf   |          |           |          |        |
-| uobyqa   |          |           |          |        |
+| solver        | source    |  gradient|  hessian | bounds|
+| ------------- | --------- |  ------- |  ------- | ----- |
+| anms          | pracma    |          |          |       |
+| BFGS          | optim()   | optional |          |       |
+| bobyqa        | minqa     |          |          |  yes  |
+| CG            | optim()   | optional |          |       |
+| hjkb          | dfoptim   |          |          |  yes  |
+| hjn           | optimx    |          |          |  yes  |
+| lbfgs         | lbfgs     | optional |          |       |
+| L-BFGS-B      | optim()   | optional |          |  yes  |
+| lbfgsb3c      | lbfgsb3c  | optional |          |  yes  |
+| mla           | marqLevAlg| optional | optional |       |
+| ncg           | optimx    | required |          |  yes  |
+| Nelder-Mead   | optim()   |          |          |       |
+| newuoa        | minqa     |          |          |       |
+| nlm           | base-R    | optional | optional |       |
+| nlminb        | base-R    | optional | optional |  yes  |
+| nlnm          | nloptr    |          |          |  yes  |
+| nmkb          | dfoptim   |          |          |  yes  |
+| nvm           | optimx    | required |          |  yes  |
+| pracmanm      | pracma    |          |          |       |
+| Rcgmin        | optimx    | required |          |  yes  |
+| Rtnmin        | optimx    | required |          |  yes  |
+| Rvmmin        | optimx    | required |          |  yes  |
+| slsqp         | nloptr    | optional |          |  yes  |
+| snewtm        | optimx    | required | required |       |
+| snewton       | optimx    | required | required |       |
+| spg           | BB        | optional |          |  yes  |
+| subplex       | subplex   |          |          |       |
+| tnewt         | nloptr    | optional |          |  yes  |
+| ucminf        | ucminf    | optional |          |       |
+| uobyqa        | minqa     |          |          |       |
+|---------------|-----------|----------|----------|-------|
+
+Note that there are other versions of some of these algorithms
+in different packages, e.g., package nloptr has a bobyqa() function.
 
 
 
@@ -235,4 +239,4 @@ Note that some development versions of packages remain on R-forge. Use of these
 is at your own risk. 
 
 
-### Updated 2024-10-01
+### Updated 2024-10-02
