@@ -3,22 +3,7 @@
 optimx is an R package that extends and enhances the optim() function of base R,
 in particular by unifying the call to many solvers.
 This Gitlab project has been established to document optimx and its development.
-A more detailed history of the package is given after the links to it.
-
-  - Next an extensive, but clear table of all the methods that are available.
-     gradients or not, bounds constraints, etc.
-
-  - What are masks and how to use them.
- 
-  - Avoid mystic hints such as "the older solvers have been left available".
-
-  - I am unsure what to do with the "categorization" section. It is long and
-     intertwined and not really understandable even for me.
-
-My advice would be: Leave out everything that is more or less presented in
-detail in one of the vignettes. The README shall enable the reader to make 
-use of the package quickly and correctly.
-
+A more detailed history of the package is given at the bottom of this document.
 
 ## Installation
 
@@ -101,8 +86,8 @@ The package contains several solver functions. See specific man pages for detail
  - hjkb: Hooke and Jeeves derivative-free minimization with bounds constraints, from dfoptim package
  - lbfgs: Low-storage BFGS minimizer, from nloptr package
  - L-BFGS-B: optim() version of limited memory BFGS minimizer with bounds (Byrd et al., 1995)
- - lbfgsb3c: 2011 update of L-BFGS-B
- - mla: A parallelized general-purpose optimization based on Marquardt-Levenberg algorithm
+ - lbfgsb3c: 2011 update of L-BFGS-B, from lbfgsb3c package
+ - mla: A parallelized general-purpose optimization based on Marquardt-Levenberg algorithm, from marqLevAlg package
  - Nelder-Mead: optim() version of the Nelder-Mead polytope (simplex) minimization
  - newuoa: Unconstrained optimization by quadratic approximation, from minqa package
  - nlm: Minimization via a Newton-like method
@@ -196,7 +181,18 @@ and other optimization tasks. See the man pages for details on usage.
 Note that there are other versions of some of these algorithms
 in different packages, e.g., package nloptr has a bobyqa() function.
 
+## Fixed parameters via equal bounds (masks)
 
+Some solvers, in particular ncg() and nvm() can explicitly deal with
+lower and upper bounds constraints that are set equal for some parameters. Such fixed
+parameters can be useful when a parameter is not generally altered
+to try to optimize the function, but may be allowed into the optimization
+in the future. Such constraints are sometimes called "masks". The initial
+parameter value must be consistent with the bounds settings.
+
+Use of equal lower and upper bounds may be possible for other solvers that
+handle bounds constraints, but users are urged to test this possibility before
+trusting results.
 
 
 ## History of optimx
