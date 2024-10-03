@@ -77,32 +77,46 @@ The package contains several solver functions. See specific man pages for detail
  - Rtnmin-package contains functions needed by tn() or tnbc()
  - hjn() is a didactic implementation of the Hooke and Jeeves pattern search
 
-## Solvers available from other packages
+## Solver characteristics
 
- - anms: Adaptive Nelder-Mead minimization (Gao/Han), from pracma package
- - BFGS: optim() Fletcher variable metric minimizer 
- - bobyqa: Powell's bounded optimization by quadratic approximation, from minqa package
- - CG: optim() conjugate gradient minimizer (use is strongly discouraged as it performs poorly)
- - hjkb: Hooke and Jeeves derivative-free minimization with bounds constraints, from dfoptim package
- - lbfgs: Low-storage BFGS minimizer, from nloptr package
- - L-BFGS-B: optim() version of limited memory BFGS minimizer with bounds (Byrd et al., 1995)
- - lbfgsb3c: 2011 update of L-BFGS-B, from lbfgsb3c package
- - mla: A parallelized general-purpose optimization based on Marquardt-Levenberg algorithm, from marqLevAlg package
- - Nelder-Mead: optim() version of the Nelder-Mead polytope (simplex) minimization
- - newuoa: Unconstrained optimization by quadratic approximation, from minqa package
- - nlm: Minimization via a Newton-like method
- - nlminb: Unconstrained and bounds-constrained minimization via several algorithms (Gay, 1990)
- - nlnm: Nelder-Mead minimization as implemented in package nloptr, with bounds applied by moving
-   parameters to nearest bound
- - nmkb:  Nelder-Mead minimization as implemented in package dfoptim, using a transformation to
-   enforce bounds
- - pracmanm: Nelder-Mead minimization as implemented in package pracma
- - slsqp: Sequential quadratic programming, from package nloptr
- - spg: Spectral projected gradient minimization, from package BB
- - subplex: An extension of ideas of Nelder-Mead, from package subplex
- - tnewt: Truncated Newton minimization, from package nloptr
- - ucminf: A variable metric minimizer, from package ucminf
- - uobyqa: Unconstrained optimization by quadratic approximation, from minqa package
+The table includes methods from other packages or base-R as well as solvers in optimx.
+
+| solver        | source    | gradient | hessian  | bounds| algorithm  class |  Notes                 |
+| ------------- | --------- |  ------- |  ------- | ----- | ---------------- | ---------------------- |
+| anms          | pracma    |          |          |       | polytope         |                        |
+| BFGS          | optim()   | optional |          |       | variable metric  |                        |
+| bobyqa        | minqa     |          |          |  yes  | model & descend  |                        |
+| CG            | optim()   | optional |          |       | conjugate grad   | Deprecated             |
+| hjkb          | dfoptim   |          |          |  yes  | Hooke&Jeeves     |                        |
+| hjn           | optimx    |          |          |  yes  | Hooke&Jeeves     |                        |
+| lbfgs         | lbfgs     | optional |          |       | LM quasi Newton  |                        |
+| L-BFGS-B      | optim()   | optional |          |  yes  | LM quasi Newton  |                        |
+| lbfgsb3c      | lbfgsb3c  | optional |          |  yes  | LM quasi Newton  |                        |
+| mla           | marqLevAlg| optional | optional |       | Newton-like      |                        |
+| ncg           | optimx    | required |          |  yes  | conjugate grad   |                        |
+| Nelder-Mead   | optim()   |          |          |       | polytope         |                        |
+| newuoa        | minqa     |          |          |       | model & descend  |                        |
+| nlm           | base-R    | optional | optional |       | Newton-like      |                        |
+| nlminb        | base-R    | optional | optional |  yes  | multiple         |                        |
+| nlnm          | nloptr    |          |          |  yes  | polytope         |                        |
+| nmkb          | dfoptim   |          |          |  yes  | polytope         |                        |
+| nvm           | optimx    | required |          |  yes  | variable metric  |                        |
+| pracmanm      | pracma    |          |          |       | polytope         |                        |
+| Rcgmin        | optimx    | required |          |  yes  | conjugate grad   | legacy compatibility   |
+| Rtnmin        | optimx    | required |          |  yes  | trunc. Newton    |                        |
+| Rvmmin        | optimx    | required |          |  yes  | variable metric  | legacy compatibility   |
+| slsqp         | nloptr    | optional |          |  yes  | quad programming |                        |
+| snewtm        | optimx    | required | required |       | Newton-like      | Didactic               |
+| snewton       | optimx    | required | required |       | Newton-like      | Didactic               |
+| spg           | BB        | optional |          |  yes  | proj. gradient   |                        |
+| subplex       | subplex   |          |          |       | polytope         |                        |
+| tnewt         | nloptr    | optional |          |  yes  | trunc. Newton    |                        |
+| ucminf        | ucminf    | optional |          |       | variable metric  |                        |
+| uobyqa        | minqa     |          |          |       | model & descend  | Use newuoa             |
+|---------------|-----------|----------|----------|-------|------------------|------------------------|
+
+Note that there are other versions of some of these algorithms
+in different packages, e.g., package nloptr has a bobyqa() function.
 
 ## Adding solvers
 
@@ -141,45 +155,6 @@ and other optimization tasks. See the man pages for details on usage.
 - optchk.R: Attempts to check user-supplied objective function (optionally also gradient and hessian)
 - optimx-package.R: Provides local versions of summary() and coef() functions and some other code.
 - zzz.R: Startup actions. At time of writing, used for tn() and tnbc().
-
-## Solver characteristics
-
-| solver        | source    |  gradient|  hessian | bounds|
-| ------------- | --------- |  ------- |  ------- | ----- |
-| anms          | pracma    |          |          |       |
-| BFGS          | optim()   | optional |          |       |
-| bobyqa        | minqa     |          |          |  yes  |
-| CG            | optim()   | optional |          |       |
-| hjkb          | dfoptim   |          |          |  yes  |
-| hjn           | optimx    |          |          |  yes  |
-| lbfgs         | lbfgs     | optional |          |       |
-| L-BFGS-B      | optim()   | optional |          |  yes  |
-| lbfgsb3c      | lbfgsb3c  | optional |          |  yes  |
-| mla           | marqLevAlg| optional | optional |       |
-| ncg           | optimx    | required |          |  yes  |
-| Nelder-Mead   | optim()   |          |          |       |
-| newuoa        | minqa     |          |          |       |
-| nlm           | base-R    | optional | optional |       |
-| nlminb        | base-R    | optional | optional |  yes  |
-| nlnm          | nloptr    |          |          |  yes  |
-| nmkb          | dfoptim   |          |          |  yes  |
-| nvm           | optimx    | required |          |  yes  |
-| pracmanm      | pracma    |          |          |       |
-| Rcgmin        | optimx    | required |          |  yes  |
-| Rtnmin        | optimx    | required |          |  yes  |
-| Rvmmin        | optimx    | required |          |  yes  |
-| slsqp         | nloptr    | optional |          |  yes  |
-| snewtm        | optimx    | required | required |       |
-| snewton       | optimx    | required | required |       |
-| spg           | BB        | optional |          |  yes  |
-| subplex       | subplex   |          |          |       |
-| tnewt         | nloptr    | optional |          |  yes  |
-| ucminf        | ucminf    | optional |          |       |
-| uobyqa        | minqa     |          |          |       |
-|---------------|-----------|----------|----------|-------|
-
-Note that there are other versions of some of these algorithms
-in different packages, e.g., package nloptr has a bobyqa() function.
 
 ## Fixed parameters via equal bounds (masks)
 
@@ -235,4 +210,4 @@ Note that some development versions of packages remain on R-forge. Use of these
 is at your own risk. 
 
 
-### Updated 2024-10-02
+### Updated 2024-10-03
