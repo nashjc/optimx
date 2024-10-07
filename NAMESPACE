@@ -7,6 +7,7 @@ importFrom("nloptr", "nloptr")
 importFrom("pracma", "anms")
 importFrom("pracma", "nelder_mead")
 importFrom("utils", "getFromNamespace")
+importFrom("utils", "install.packages")
 # importFrom("marqLevAlg", "mla")
 export(
   "axsearch",

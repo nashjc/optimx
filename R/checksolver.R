@@ -27,8 +27,13 @@ checkallsolvers <- function() {
     p1 <- apkg[imeth]
     csres <- checksolver(m1, ameth, apkg)
     if (csres != m1) {
-      badmeth <- c(badmeth, m1)  
       cat("method ",m1," is missing\n")
+      prmpt<-paste("Install method ",m1,"(Y/n)",sep='')
+      ans <- readline(prmpt)
+      if (length(ans)<1 || ans=="Y" || ans=="y"){
+         chk<-install.packages(p1)
+      }
+      else {badmeth <- c(badmeth, m1)}
     }
     else {
       cat("method ",m1,"(",tnam[imeth],") from package ",p1," is available\n")
