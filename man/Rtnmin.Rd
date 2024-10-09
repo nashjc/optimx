@@ -1,11 +1,15 @@
-\name{tnbc}
+\name{Rtnmin}
+\alias{tn}
 \alias{tnbc}
 \encoding{UTF-8}
-\title{Truncated Newton function minimization with bounds constraints}
-\description{A bounds-constarined R implementation of a truncated Newton method
-for minimization of nonlinear functions subject to bounds (box) constraints. 
+\title{Truncated Newton function minimization
+\description{An R implementation of the truncated Newton method
+for minimization of nonlinear functions optionally subject 
+to bounds (box) constraints.  The algorithm is based on Nash (1979) 
 }
 \usage{
+   tn(x, fgfun, trace, \dots)
+
    tnbc(x, fgfun, lower, upper, trace=0, \dots)
 }
 \arguments{
@@ -16,13 +20,16 @@ for minimization of nonlinear functions subject to bounds (box) constraints.
    The first argument of \code{fgfun} must be \code{par}. }
  \item{lower}{A vector of lower bounds on the parameters.}
  \item{upper}{A vector of upper bounds on the parameters.}
- \item{trace}{Set >0 to cause intermediate output to allow progress
+ \item{trace}{Set > 0 to cause intermediate output to allow progress
        to be followed.}
  \item{\dots}{Further arguments to be passed to \code{fn}.}
 }
 \details{
   Function \code{fgfun} must return a numeric value in list item \code{f}
   and a numeric vector in list item \code{g}.
+
+  These routines can be most easily called using the \code{optimr} 
+  function with method "Rtnmin".
 }
 
 \value{
@@ -45,7 +52,7 @@ for minimization of nonlinear functions subject to bounds (box) constraints.
 
    For Matlab code, see http://www.netlib.org/opt/tn
 }
-\seealso{\code{\link{optim}}}
+\seealso{\code{\link{optimr}}}
 \examples{
 ## See tn.Rd
 
