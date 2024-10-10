@@ -1,4 +1,5 @@
 ncgqs <- function(par, fn, gr, lower=NULL, upper=NULL, bdmsk = NULL, control = list(), ...) {
+# This version tries a quadratic line search
 ## Feb 15 2022 -- working but inefficient for exrosen
     ## An R version of the conjugate gradient minimization using the Dai-Yuan ideas
     # THis version does VERY LITTLE error checking

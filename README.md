@@ -57,7 +57,8 @@ with arguments as for optimr() except for method, which is now a vector of chara
 
 ## Solvers provided within the optimx package
 
-The package contains several solver functions. See specific man pages for details.
+The package contains several solver functions. See specific man pages for details. Some of these
+are intended to be called via optimr() and NOT independently.
 
  - ncg() is a conjugate gradient minimizer based on the Dai/Yuan approach. 
  - Rcgmin() is an earlier implementation of ncg() which may give slightly different results and

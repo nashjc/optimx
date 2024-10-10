@@ -2,7 +2,6 @@ NEWS about R package optimx
 
 =========== ONGOING CONCERNS =============
 CURRENT BUGS or ISSUES
-<<<<<<< HEAD
       o As revealed by nonlinear equations work (dsltest.R), spg checkGrad controls
         in opm() seem to be ignored
       o control$parscale needs documentation and example
@@ -16,6 +15,7 @@ CURRENT BUGS or ISSUES
       o We will NOT add ipoptr until non-standard install is fixed up.
 
 TODOS ideas:
+   o    ncg() and nvm() examples?? Possibly via optimr()
    o    demo() should be cleaner
    o    On failure of method, what should be returned? Could current optimr result in
         such cases be improved?

@@ -23,7 +23,9 @@ optimr(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=Inf,
    argument the vector of parameters over which minimization is to take
    place.  It should return a scalar result.}
  \item{gr}{A function to return (as a vector) the gradient for those methods that 
-   can use this information.
+   can use this information. The first argument of this function is the supplied 
+   set of parameters \code{par}, with auxiliary data in \dots. This function 
+   returns the gradient as a numeric vector.
 
    If \code{gr} is \code{NULL}, then this is passed forward and 
    whatever default action is specified for the 
@@ -36,11 +38,27 @@ optimr(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=Inf,
    a gradient approximation function, for example, "grfwd", "grback" and
    "grcentral" for standard forward, backward and central approximations.
    Method "grnd" uses the \code{grad()} function from package \code{numDeriv}.
+   Method "grpracma" uses the approximation from package \code{pracma}.
+
+   The use of numerical gradients is generally discouraged, and particularly
+   for \code{ncg}, \code{Rcgmin}, \code{nvm} and \code{Rvmmin}.
+   First, the termination tests use a size measure on the gradient, and 
+   numerical gradient approximations can sometimes give results that are 
+   too large. Second, if there are bounds constraints, the step(s) taken 
+   to calculate the approximation to the derivative are NOT checked to see 
+   if they are out of bounds, and the function may be undefined at the evaluation
+   point. If an approximation must be used, "grcentral" is recommended in the 
+   absence of other considerations.
+
+   Note that all but the \code{grnd} routine use a stepsize parameter that
+   can be redefined in a special environment \code{optsp} in variable \code{deps}.
+   The default is \code{optsp$deps = 1e-06}. 
+   However, redefining this is discouraged unless you understand what
+   you are doing.
  }   
   \item{hess}{A function to return (as a matrix) the hessian for those methods that
-   can use this information.
-
-  If \code{hess} is the character string "approx", then ??
+   can use this information. At time of writing, quoted arguments (as for \code{gr})
+   are not offered as a mechanism for providing a numerical approximation.
 
   If \code{hess} is \code{NULL}, then this is passed forward and 
    whatever default action is specified for the 

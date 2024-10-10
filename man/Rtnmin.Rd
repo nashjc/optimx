@@ -2,7 +2,7 @@
 \alias{tn}
 \alias{tnbc}
 \encoding{UTF-8}
-\title{Truncated Newton function minimization
+\title{Truncated Newton function minimization}
 \description{An R implementation of the truncated Newton method
 for minimization of nonlinear functions optionally subject 
 to bounds (box) constraints.  The algorithm is based on Nash (1979) 
