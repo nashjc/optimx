@@ -1175,12 +1175,12 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
             class(ans)[1] <- "try-error"            
         }
         ## if(nsctrl > 0) { stop("There are no extra controls set up for ",method) }
-        if (inherits(ans, "undefined")){ #?? need to explain why no dots??
-            ans <- try(lbfgs::lbfgs(efn, egr, vars=spar, 
+        if (inherits(ans, "undefined")){ 
+            ans <- try(lbfgs::lbfgs(efn, egr, vars=spar, max_iterations=control$maxit,
                     invisible=invisible))
         }
         if (! inherits(ans, "try-error")) {
-        ## Need to check these carefully!!?
+        ## Need to check these carefully!!??
             ans$par <- ans$par*pscale
             ans$counts[1] <- NA # lbfgs seems to have no output like this
             ans$counts[2] <- NA

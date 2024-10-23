@@ -1,6 +1,6 @@
 Package: optimx
-Version: 2024-10.9
-Date: 2024-10-09
+Version: 2024-10.22
+Date: 2024-10-22
 Title: Expanded Replacement and Extension of the 'optim' Function
 Authors@R: c( person(given = c("John", "C"), family = "Nash", role =
     c("aut", "cre"), email = "nashjc@uottawa.ca"), person(given =
