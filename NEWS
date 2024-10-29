@@ -51,6 +51,9 @@ TODOS ideas:
 NEWS from the optimx package
 
 VERSION 2024-10-09
+   o    Added vignette which shows addition of pracmanm() solver to optimr()
+
+VERSION 2024-10-09
    o    Make Rtnmin the primary name for tn and tnbc tools (Truncated Newton)
 
 VERSION 2024-10-07
