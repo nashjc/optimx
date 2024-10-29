@@ -1,4 +1,4 @@
-tn <- function(x, fgfun, trace=0, ...) {
+tn <- function(x, fgfun, trace=0, control=list(), ...) {
   ## ---------------------------------------------------------
   ##  this routine solves:  minimize f(x)
   ## 
@@ -22,10 +22,16 @@ tn <- function(x, fgfun, trace=0, ...) {
   ##  maxit  - maximum number of inner iterations per step
   ## ---------------------------------------------------------
   n  <- length(x)
-  maxit <- 1 + round((n+1)/2)
-  maxit <- min(50, maxit);
-  maxfun <- 150*n;
-  stepmx <- 10;
+  if (is.null(control$maxit)){
+    maxit <- 1 + round((n+1)/2)
+    maxit <- min(50, maxit)
+  } 
+  else { maxit <- control$maxit } 
+  if (is.null(control$maxfun)) {
+    maxfun <- 150*n;
+  }
+  else { maxfun <- control$maxfun }
+  stepmx <- 10
   eps<- .Machine$double.eps
   accrcy <- 100*eps;
   ## result is list of [xstar, f, g, ierror]
