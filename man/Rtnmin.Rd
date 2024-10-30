@@ -8,7 +8,7 @@ for minimization of nonlinear functions optionally subject
 to bounds (box) constraints.  The algorithm is based on Nash (1979) 
 }
 \usage{
-   tn(x, fgfun, trace, \dots)
+   tn(x, fgfun, trace=0, \dots)
 
    tnbc(x, fgfun, lower, upper, trace=0, \dots)
 }
@@ -30,6 +30,9 @@ to bounds (box) constraints.  The algorithm is based on Nash (1979)
 
   These routines can be most easily called using the \code{optimr} 
   function with method "Rtnmin".
+
+  Note that as at 2024-10-23, the evaluation limits maxit and maxfun
+  which appear in the code do NOT appear to be active.
 }
 
 \value{

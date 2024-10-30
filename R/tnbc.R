@@ -1,4 +1,4 @@
-tnbc <- function (x, fgfun, lower, upper, trace=0, ...) {
+tnbc <- function (x, fgfun, lower, upper, trace=0, control=list(), ...) {
 ##---------------------------------------------------------
 ## this routine solves the optimization problem
 ##
@@ -26,13 +26,19 @@ tnbc <- function (x, fgfun, lower, upper, trace=0, ...) {
 ## accrcy - accuracy of computed function values
 ## maxit  - maximum number of inner iterations per step
 ##---------------------------------------------------------
-eps    <- .Machine$double.eps
-n      <- length(x)
-maxit  <- 1 + round((n+1)/2)
-maxit  <- min(50, maxit)
-maxfun <- 150*n
-stepmx <- 10
-accrcy <- 100*eps
+  eps    <- .Machine$double.eps
+  n  <- length(x)
+  if (is.null(control$maxit)){
+    maxit <- 1 + round((n+1)/2)
+    maxit <- min(50, maxit)
+  } 
+  else { maxit <- control$maxit } 
+  if (is.null(control$maxfun)) {
+    maxfun <- 150*n;
+  }
+  else { maxfun <- control$maxfun }
+  stepmx <- 10
+  accrcy <- 100*eps
 ##---------------------------------------------------------
 ## return [xstar, f, g, ierror] 
     lmqnbc(x, fgfun, lower, upper, maxit, maxfun, stepmx, accrcy, trace=trace)

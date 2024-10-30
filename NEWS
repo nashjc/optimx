@@ -2,6 +2,7 @@ NEWS about R package optimx
 
 =========== ONGOING CONCERNS =============
 CURRENT BUGS or ISSUES
+      o Rtnmin appears to get counts wrong (241029)
       o As revealed by nonlinear equations work (dsltest.R), spg checkGrad controls
         in opm() seem to be ignored
       o control$parscale needs documentation and example
@@ -49,6 +50,17 @@ TODOS ideas:
 
 ===================================================================================
 NEWS from the optimx package
+
+VERSION 2024-10-22??
+   o    Note that stopping when number of function, gradient or hessian evaluations 
+        reached is difficult as solvers have many different approaches, and some 
+	lack such controls. Note that many talk of "iterations". We will use maxit 
+	to be the limit on gradient evaluations. Users could adjust the efn(), egr()
+	and ehess() in function optimr() to force a halt if desired. Commented out
+	example code for optsp$kfn and optsp$kgr tests are in optimr.R.
+   o    Fix tn() and tnbc() to take control list
+   o    Incorporate maxfeval into Rcgmin, Rcgminb, Rcgminu
+   o    Cleanup of a number of small issues.
 
 VERSION 2024-10-09
    o    Added vignette which shows addition of pracmanm() solver to optimr()

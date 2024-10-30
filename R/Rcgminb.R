@@ -71,7 +71,7 @@ Rcgminb <- function(par, fn, gr, lower, upper, bdmsk = NULL, control = list(), .
     #  Date:  April 2, 2009; revised July 28, 2009
     #################################################################
     # control defaults -- idea from spg
-    ctrl <- list(maxit = 500, maximize = FALSE, trace = 0, eps = 1e-07, 
+    ctrl <- list(maxit = 500, maxfeval=10000, maximize = FALSE, trace = 0, eps = 1e-07, 
         dowarn = TRUE, tol=0)
     namc <- names(control)
     if (!all(namc %in% names(ctrl))) 
@@ -82,6 +82,7 @@ Rcgminb <- function(par, fn, gr, lower, upper, bdmsk = NULL, control = list(), .
     else tol<-ctrl$tol
     maxit <- ctrl$maxit  # limit on function evaluations
     maximize <- ctrl$maximize  # TRUE to maximize the function
+    maxfeval <- ctrl$maxfeval
     trace <- ctrl$trace  # 0 for no output, >0 for output (bigger => more output)
     if (trace > 2) cat("trace = ", trace, "\n")
     eps <- ctrl$eps
@@ -114,7 +115,8 @@ Rcgminb <- function(par, fn, gr, lower, upper, bdmsk = NULL, control = list(), .
     }
     bvec <- par  # copy the parameter vector
     n <- length(bvec)  # number of elements in par vector
-    maxfeval <- round(sqrt(n + 1) * maxit)  # change 091219
+    if (is.null(maxfeval)) maxfeval <- round(sqrt(n + 1) * maxit)  # change 091219
+    cat("Rcgminb: maxfeval set to ",maxfeval,"\n")
     ig <- 0  # count gradient evaluations
     ifn <- 1  # count function evaluations (we always make 1 try below)
     stepredn <- 0.15  # Step reduction in line search
