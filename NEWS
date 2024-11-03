@@ -51,7 +51,11 @@ TODOS ideas:
 ===================================================================================
 NEWS from the optimx package
 
-VERSION 2024-10-22??
+VERSION 2024-11-03
+   o    Minor fix to Rtnmin.Rd
+   o    Remove extra material from /inst/doc to reduce size
+
+VERSION 2024-10-22
    o    Note that stopping when number of function, gradient or hessian evaluations 
         reached is difficult as solvers have many different approaches, and some 
 	lack such controls. Note that many talk of "iterations". We will use maxit 

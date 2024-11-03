@@ -1,6 +1,7 @@
 \name{Rtnmin}
 \alias{tn}
 \alias{tnbc}
+\alias{Rtnmin}
 \encoding{UTF-8}
 \title{Truncated Newton function minimization}
 \description{An R implementation of the truncated Newton method
@@ -8,9 +9,9 @@ for minimization of nonlinear functions optionally subject
 to bounds (box) constraints.  The algorithm is based on Nash (1979) 
 }
 \usage{
-   tn(x, fgfun, trace=0, \dots)
+   tn(x, fgfun, trace=0, control=list(), \dots)
 
-   tnbc(x, fgfun, lower, upper, trace=0, \dots)
+   tnbc(x, fgfun, lower, upper, trace=0, control=list(), \dots)
 }
 \arguments{
  \item{x}{A numeric vector of starting estimates.}
@@ -22,6 +23,8 @@ to bounds (box) constraints.  The algorithm is based on Nash (1979)
  \item{upper}{A vector of upper bounds on the parameters.}
  \item{trace}{Set > 0 to cause intermediate output to allow progress
        to be followed.}
+ \item{control}{A list of control parameters. See the R code for \code{tn()}
+     and \code{tnbc()} for details. Most users can omit this.}       
  \item{\dots}{Further arguments to be passed to \code{fn}.}
 }
 \details{
