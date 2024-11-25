@@ -51,10 +51,12 @@ TODOS ideas:
 ===================================================================================
 NEWS from the optimx package
 
-VERSION 2024-11-03
+VERSION 2024-11-25
    o    Fix reset of parameters in grfwd
    o    Minor fix to Rtnmin.Rd
    o    Remove extra material from /inst/doc to reduce size
+   o    Ensure maxfeval gets set correctly in ncg
+   o    Rationalize Rd files for Rvmmin, Rcgmin, Rtnmin
 
 VERSION 2024-10-22
    o    Note that stopping when number of function, gradient or hessian evaluations 

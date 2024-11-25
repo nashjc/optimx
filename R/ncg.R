@@ -21,11 +21,14 @@ ncg <- function(par, fn, gr, bds, control = list()) {
     } else { mygr<-gr }
     ## Set working parameters (See CNM Alg 22)
     if (trace > 0) {
-        cat("ncg -- J C Nash 2023 - bounds constraint version of new CG\n")
+        cat("ncg -- J C Nash 2023 (vn 20241125) - bounds constraint version of new CG\n")
         cat("an R implementation of Alg 22 with Yuan/Dai modification\n")
     }
     bvec <- par  # copy the parameter vector
-    maxfeval <- round(sqrt(npar + 1) * maxit)  # change 091219
+    if (is.null(ctrl$maxfeval)){
+         maxfeval <- round(sqrt(npar + 1) * maxit)
+    } else { maxfeval <- ctrl$maxfeval }  # change 091219, 241125
+    if (trace > 0) cat("maxfeval = ", maxfeval," maxit=",maxit,"\n")
     ig <- 0  # count gradient evaluations
     ifn <- 1  # count function evaluations (we always make 1 try below)
     stepredn <- ctrl$stepredn
