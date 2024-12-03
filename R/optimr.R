@@ -129,6 +129,7 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
      if ( ! (gr %in% control$grapprox)) stop(gr," is not a valid gradient approximation code")
      if (control$trace>0) cat("Using numerical approximation '",gr,"' to gradient in optimr()\n")
      egr <- function(spar){ 
+       optsp$kgr<-optsp$kgr+1 # counter # 20241202 -- was missing from scounts
        if (control$trace > 2) {
          cat("par:"); print(par)
          cat("fnscale =",fnscale,"  pscale="); print(pscale)

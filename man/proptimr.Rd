@@ -5,11 +5,14 @@
    \code{proptimr} displays the contents of a result computed by \code{optimr()}. 
 }
 \usage{
-   proptimr(opres)
+   proptimr(opres, nlim=5)
 }
 \arguments{
     \item{opres}{
         the object returned by function \code{optimr()}
+        }
+    \item{nlim}{
+        Only the first nlim elements of the solution are displayed.
         }
 }
 \value{
