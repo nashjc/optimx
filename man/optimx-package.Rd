@@ -89,9 +89,9 @@ tn                  Unconstrained truncated Newton method
 }
 }
 \author{
-John C Nash <nashjc@uottawa.ca> and Ravi Varadhan <RVaradhan@jhmi.edu>
+John C Nash <profjcnash@gmail.com> and Ravi Varadhan <RVaradhan@jhmi.edu>
 
-Maintainer: John C Nash <nashjc@uottawa.ca>
+Maintainer: John C Nash <profjcnash@gmail.com>
 }
 \references{
   Nash, John C. and Varadhan, Ravi (2011) Unifying Optimization Algorithms 

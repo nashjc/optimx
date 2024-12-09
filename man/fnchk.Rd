@@ -61,7 +61,7 @@ list(fval=fval, infeasible=infeasible, excode=excode, msg=msg)
 
 
 \author{
-    John C. Nash <nashjc@uottawa.ca>
+    John C. Nash <profjcnash@gmail.com>
 }
 
 \examples{

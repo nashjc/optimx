@@ -3,13 +3,13 @@ Version: 2024-12.02
 Date: 2024-12-02
 Title: Expanded Replacement and Extension of the 'optim' Function
 Authors@R: c( person(given = c("John", "C"), family = "Nash", role =
-    c("aut", "cre"), email = "nashjc@uottawa.ca"), person(given =
+    c("aut", "cre"), email = "profjcnash@gmail.com"), person(given =
     "Ravi", family = "Varadhan", role = "aut", email =
     "RVaradhan@jhmi.edu"), person(given = "Hans W", family =
     "Borchers", role = "ctb", email =  "hwborchers@gmail.com"),  
     person(given = "Gabor", family = "Grothendieck", role = "ctb", email =
     "ggrothendieck@gmail.com") )
-Maintainer: John C Nash <nashjc@uottawa.ca>
+Maintainer: John C Nash <profjcnash@gmail.com>
 Description: Provides a replacement and extension of the optim()
     function to call to several function minimization codes in R in a single
     statement. These methods handle smooth, possibly box constrained functions 
@@ -24,19 +24,14 @@ BugReports: https://github.com/nashjc/optimx/issues
 LazyLoad: Yes
 Imports: numDeriv, nloptr, pracma
 NeedsCompilation: no
-Suggests: 
-    knitr,
-    rmarkdown,
-    setRNG,
-    BB,
-    ucminf,
-    minqa,
-    dfoptim,
-    lbfgsb3c,
-    lbfgs,
-    subplex,
-    marqLevAlg,
-    testthat (>= 3.0.0),
-    R.rsp
+Suggests: knitr, rmarkdown, setRNG, BB, ucminf, minqa, dfoptim,
+        lbfgsb3c, lbfgs, subplex, marqLevAlg, testthat (>= 3.0.0),
+        R.rsp
 VignetteBuilder: R.rsp
 Config/testthat/edition: 3
+Config/build/clean-inst-doc: false
+Packaged: 2024-12-08 14:29:42 UTC; john
+Author: John C Nash [aut, cre],
+  Ravi Varadhan [aut],
+  Hans W Borchers [ctb],
+  Gabor Grothendieck [ctb]
