@@ -1,5 +1,5 @@
 Package: optimx
-Version: 2024-12.02
+Version: 2024-12.2
 Date: 2024-12-02
 Title: Expanded Replacement and Extension of the 'optim' Function
 Authors@R: c( person(given = c("John", "C"), family = "Nash", role =
@@ -30,7 +30,7 @@ Suggests: knitr, rmarkdown, setRNG, BB, ucminf, minqa, dfoptim,
 VignetteBuilder: R.rsp
 Config/testthat/edition: 3
 Config/build/clean-inst-doc: false
-Packaged: 2024-12-08 14:29:42 UTC; john
+Packaged: 2024-12-09 13:43:51 UTC; john
 Author: John C Nash [aut, cre],
   Ravi Varadhan [aut],
   Hans W Borchers [ctb],
