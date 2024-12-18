@@ -52,6 +52,9 @@ TODOS ideas:
 NEWS from the optimx package
 
 VERSION 2024-12-02
+   o    Warnings about with() in opm.Rd and optimr.Rd
+
+VERSION 2024-12-02
    o    Fix gradient count in scounts for approximations
    o    Limit proptimr to nlim output items in vectors and Hessian rows and cols.
    o    Fix reset of parameters in grfwd

@@ -64,6 +64,10 @@ opm(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
 }
 \details{
   Note that arguments after \code{\dots} must be matched exactly.
+  
+  CAUTION:  Avoid the use of \code{with()} in objective, gradient and hessian 
+  functions, which require a vector of parameters, while \code{with()} does
+  NOT work with vectors. See details of \code{optimr()}.
 
   For details of how \code{opm()} calls the methods, see the documentation
   and code for \code{optimr()}. The documentation and code for individual

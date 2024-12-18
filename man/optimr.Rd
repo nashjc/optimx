@@ -86,7 +86,16 @@ optimr(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=Inf,
 }
 \details{
   Note that arguments after \code{\dots} should be matched exactly.
-
+  
+  CAUTION: It has been noted that users may be tempted to use \code{with()}
+  to extract named variables from a named list. The objective \code{fn} and
+  corresponding gradient and hessian use a vector of parameters, and some
+  solvers will strip the names. \code{with()} does NOT work with vectors.
+  Thus, if your third parameter is used in your function as \code{PKb}, you 
+  need to explicitly include a line in the function \code{PKb <- par[3]}, 
+  and similarly for other quantities. The situation is made more confusing 
+  in that some solvers will accept \code{with()} satisfactorily.
+  
   By default \code{optimr} performs minimization, but it will maximize
   if \code{control$maximize} is TRUE. The original optim() function allows
   \code{control$fnscale} to be set negative to accomplish this, and this
