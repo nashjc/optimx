@@ -7,7 +7,7 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
   tmp <- is.null(fn) # will fail if undefined
   tmp <- is.null(gr) # will fail if undefined, but not if missing from call
   npar <- length(par)
-  pstring<-names(par) # the names of the parameters
+  parnam <- names(par) # in case of named parameters
   npar <- length(par)
   ctrl <- ctrldefault(npar)
   ncontrol <- names(control)
@@ -114,10 +114,10 @@ opm <- function(par, fn, gr=NULL, hess=NULL, lower=-Inf, upper=Inf,
   nmeth <- length(method) # in case methods removed
   if (nmeth < 1) stop("No suitable methods requested for opm()")
 
-  if (is.null(pstring)) {
-      for (j in 1:npar) {  pstring[[j]]<- paste("p",j,sep='')}
+  if (is.null(parnam)) {
+      for (j in 1:npar) {  parnam[[j]]<- paste("p",j,sep='')}
   } 
-  cnames <- c(pstring, "value", "fevals", "gevals", "hevals", "convergence", "kkt1", "kkt2", "xtime")
+  cnames <- c(parnam, "value", "fevals", "gevals", "hevals", "convergence", "kkt1", "kkt2", "xtime")
   ans.ret <- matrix(NA, nrow=nmeth, ncol=npar+8) # add hevals 230619
   ans.ret <- data.frame(ans.ret)
   ans.status <- matrix(" ",nrow=nmeth, ncol=npar)

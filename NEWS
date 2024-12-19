@@ -51,7 +51,8 @@ TODOS ideas:
 ===================================================================================
 NEWS from the optimx package
 
-VERSION 2024-12-02
+VERSION 2024-12-18
+   o    Preserve parameter names in optimr()
    o    Warnings about with() in opm.Rd and optimr.Rd
 
 VERSION 2024-12-02
