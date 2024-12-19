@@ -18,7 +18,8 @@ optimr(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=Inf,
 \arguments{
  \item{par}{a vector of initial values for the parameters 
    for which optimal values are to be found. Names on the elements
-   of this vector are preserved and used in the results data frame.}  
+   of this vector are preserved and used in the results data frame.
+   Names are also (re-)attached to the parameter vector on output.}  
  \item{fn}{A function to be minimized (or maximized), with first
    argument the vector of parameters over which minimization is to take
    place.  It should return a scalar result.}
@@ -95,6 +96,9 @@ optimr(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=Inf,
   need to explicitly include a line in the function \code{PKb <- par[3]}, 
   and similarly for other quantities. The situation is made more confusing 
   in that some solvers will accept \code{with()} satisfactorily.
+  
+  As of December 2024, optimr() will issue a warning if \code{par} is not
+  a vector of doubles and will coerce \code{par} to such an object.
   
   By default \code{optimr} performs minimization, but it will maximize
   if \code{control$maximize} is TRUE. The original optim() function allows
