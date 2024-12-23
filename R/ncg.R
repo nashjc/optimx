@@ -83,7 +83,8 @@ ncg <- function(par, fn, gr, bds, control = list()) {
                   maxfeval, ") ", sep = "")
                 if (trace > 0) 
                   cat(msg, "\n")
-                ans <- list(par, fmin, c(ifn, ig), 1, msg, bdmsk)  # 1 indicates not converged in function limit
+                ans <- list(par, fmin, c(ifn, ig), 1, msg, bdmsk)  
+                    # 1 indicates not converged in function limit
                 names(ans) <- c("par", "value", "counts", "convergence", 
                   "message", "bdmsk")
                 return(ans)
@@ -201,6 +202,16 @@ ncg <- function(par, fn, gr, bds, control = list()) {
                     f <- fn(bvec)  # Because we need the value for linesearch, don't use try()
                     # instead preferring to fail out, which will hopefully be unlikely.
                     ifn <- ifn + 1
+                    if (ifn > maxfeval) {
+                      msg <- paste("Too many function evaluations (> ", 
+                                  maxfeval, ") ", sep = "")
+                      if (trace > 0) cat(msg, "\n")
+                      ans <- list(par, fmin, c(ifn, ig), 1, msg, bdmsk)  
+                          # 1 indicates not converged in function limit
+                      names(ans) <- c("par", "value", "counts", "convergence", 
+                           "message", "bdmsk")
+                      return(ans)
+                    }
                     if (is.na(f) || (!is.finite(f))) { warning("ncg - undefined function")
                       f <- .Machine$double.xmax
                     }
@@ -247,6 +258,16 @@ ncg <- function(par, fn, gr, bds, control = list()) {
                     if (changed) {
                       f <- fn(bvec)
                       ifn <- ifn + 1
+                    }
+                    if (ifn > maxfeval) {
+                      msg <- paste("Too many function evaluations (> ", 
+                          maxfeval, ") ", sep = "")
+                      if (trace > 0) cat(msg, "\n")
+                      ans <- list(par, fmin, c(ifn, ig), 1, msg, bdmsk)  
+                         # 1 indicates not converged in function limit
+                      names(ans) <- c("par", "value", "counts", "convergence", 
+                        "message", "bdmsk")
+                      return(ans)
                     }
                     if (trace > 2) cat("fmin, f1, f: ", fmin, f1, f, "\n")
                     if (f < min(fmin, f1)) { # success
