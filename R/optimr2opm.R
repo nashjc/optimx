@@ -15,10 +15,10 @@
 #            Here will be "Result of conversion from opm() result"
 # 
 ## want opmmat <- matrix(NA, nrow=nmeth, ncol=npar+8)
-
 optimr2opm <- function(ans, opmmat, xtime=NA){
-# ans is the optimr structure solution
+# ans is an optimr structure solution
 # opmmat is a matrix form of the opm() output object (NOT the summary() result)
+# This will be created if it doesn't exist.
    npar<-length(ans$par)
    pstring<-NULL
    if (is.null(pstring)) {
@@ -31,6 +31,8 @@ optimr2opm <- function(ans, opmmat, xtime=NA){
    fevals<-optsp$kfn
    gevals<-optsp$kgr
    hevals<-optsp$khe # NOTE: hope these have been updated
+   xtime<-ans$xtime
+   if (is.null(xtime)) xtime<-NA
 #   cat("fevals = ",fevals," counts:"); print(ans$counts)
    # Could check
 #   if ( fevals != ans$counts[[1]] || gevals != ans$counts[[2]]) stop("optimr2opm: Counts mismatch")
@@ -42,7 +44,7 @@ optimr2opm <- function(ans, opmmat, xtime=NA){
       msg<-paste("optimr2opm: parameter vector length missmatch: optimr->",npar," opm->",npopm,sep='')
       if (npar != npopm) stop(msg)
       opmmat <- matrix(addvec, ncol = length(addvec))
-#      colnames(opmmat)<-cnames
+      colnames(opmmat)<-cnames
       statusmat <- matrix(statusvec, ncol=npar)
    } else
    {
@@ -53,4 +55,4 @@ optimr2opm <- function(ans, opmmat, xtime=NA){
    # print(opmmat)
    attr(opmmat, "statusmat")<-statusmat
    opmmat
-}  
+} 
