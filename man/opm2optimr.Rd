@@ -14,7 +14,7 @@ opm2optimr(opmobj, rid)
 }
 \arguments{
  \item{opmobj}{the object returned by opm() from trying to solve an
-  optimization problem with multiple solvers}
+  optimization problem with multiple solvers (NOT the summary object)}
  \item{rid}{The identifier of the solver for which the solution should be
   extracted. This may be a "row ID" in the form of an integer or else a
   character string for the corresponding solver.}

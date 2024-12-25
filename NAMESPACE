@@ -37,6 +37,7 @@ export(
   "opm2optimr",
   "optchk",
   "optimr",
+  "optimr2opm",
   "optimx",
   "optsp",
   "polyopt",
