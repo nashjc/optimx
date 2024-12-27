@@ -1582,5 +1582,6 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
          }
       } else { hes <- NULL } # to ensure it is defined
       ans$hessian <- hes
+      attr(ans, "maximize") <- control$maximize # added 241224
       ans # last statement of routine
 } ## end of optimr
