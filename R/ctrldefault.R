@@ -123,6 +123,7 @@ ctrldefault <- function(npar) {
         kkt = TRUE, # Normally test KKT conditions. May take a LONG time.
         kkttol = 0.001, # tolerance for testing KKT small gradient condition 
         kkt2tol = 1.0E-6, # tolerance for testing KKT curvature condition
+        kkt2chol = TRUE, # use posdefchk.R rather than eigenvalues, otherwise False
         maskmeth = maskmeth, # list of methods that allow masks (fixed parameters)
         maximize = FALSE, # normally MINIMIZE (see fnscale)
         maxit = 500*round(sqrt(npar+1)), # limit on number of iterations or gradient evaluations

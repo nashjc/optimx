@@ -27,6 +27,7 @@ kktchk <- function(par, fn, gr, hess=NULL, upper=NULL, lower=NULL, maximize=FALS
 ## Post-processing -- Kuhn Karush Tucker conditions
 #  Ref. pg 77, Gill, Murray and Wright (1981) Practical Optimization, Academic Press
 #   print(control)
+   if (is.null(control$kkt2chol)) control$kkt2chol<-TRUE
    if (is.null(control$trace)) control$trace <- 0
    if (is.null(control$kkttol)) kkttol<-1e-3 else kkttol<-control$kkttol
    if (is.null(control$kkt2tol)) kkt2tol<-1e-6 else kkt2tol<-control$kkt2tol
@@ -118,40 +119,42 @@ kktchk <- function(par, fn, gr, hess=NULL, upper=NULL, lower=NULL, maximize=FALS
    }
    pHes[which(bdout$bdmsk != 1), ] <- 0.0
    pHes[ ,which(bdout$bdmsk != 1)] <- 0.0
-   if (nfree > 0) {
-     phev<- try(eigen(pHes)$values, silent=TRUE) # 091215 use try in case of trouble, 
-                                              # 20100711 silent
-     if (! inherits(phev,"try-error")) {
-        if (control$trace > 0) {
-          cat("Hessian eigenvalues of constrained Hessian:\n")
-          print(phev) # no check for errors
-        }
-        # now look at Hessian
-        negeig<-(phev[npar] <= (-1)*kkt2tol*(1.0+abs(fval))) # 20100711 kkt2tol
-        evratio<-phev[npar-nbm]/phev[1]
-        # If non-positive definite, then there will be zero eigenvalues (from the projection)
-        # in the place of the "last" eigenvalue and we'll have singularity.
-        # WARNING: Could have a weak minimum if semi-definite.
-        kkt2<- (evratio > kkt2tol) && (! negeig) 
-        if (control$trace > 0) {
-          cat("KKT2 result = ",kkt2,"\n") 
-        }
-        ans<-list(gmax,evratio,kkt1,kkt2, phev, ngatend=ngr, nhatend=nHes)
-        names(ans)<-c("gmax","evratio","kkt1","kkt2", "hev", "ngatend", "nhatend")
-        return(ans)
+   if (nfree > 0) { # must have at least 1 free parameter
+     if (control$kkt2chol){
+       kkt2 <- pd_check(pHes) # use posdefchk.R on pHes. We use default pivot, tol
+       evratio <- NA # don't have evratio
+       phev <- rep(NA, npar)
      } else {
-        warning("Eigenvalue failure for projected Hessian")
-        if(control$trace > 0) cat("Hessian eigenvalue calculation (projected) has failed!\n") 
-        # JN 111207 added
-        phev <- rep(NA, npar) # try to avoid stopping the run, but there is no useful info
-        evratio <- NA
-        ans<-list(gmax,evratio,kkt1,kkt2, phev, ngatend=ngr, nhatend=nHes)
-        names(ans)<-c("gmax","evratio","kkt1","kkt2", "hev", "ngatend", "nhatend")
-        return(ans)
-     }
-  } else {
+       phev<- try(eigen(pHes)$values, silent=TRUE) # 091215 use try in case of trouble, 
+                                                # 20100711 silent
+       if (! inherits(phev,"try-error")) {
+         if (control$trace > 0) {
+           cat("Hessian eigenvalues of constrained Hessian:\n")
+           print(phev) # no check for errors
+         }
+         # now look at Hessian
+         negeig<-(phev[npar] <= (-1)*kkt2tol*(1.0+abs(fval))) # 20100711 kkt2tol
+         evratio<-phev[npar-nbm]/phev[1]
+         # If non-positive definite, then there will be zero eigenvalues (from the projection)
+         # in the place of the "last" eigenvalue and we'll have singularity.
+         # WARNING: Could have a weak minimum if semi-definite.
+         kkt2<- (evratio > kkt2tol) && (! negeig) 
+       } else {
+         warning("Eigenvalue failure for projected Hessian")
+         if(control$trace > 0) cat("Hessian eigenvalue calculation (projected) has failed!\n") 
+              # JN 111207 added
+         phev <- rep(NA, npar) # try to avoid stopping the run, but there is no useful info
+         evratio <- NA
+       } # eigenvalue failure for kkt2
+     } # end kkt2chol choice
+     if (control$trace > 0) { cat("KKT2 result = ",kkt2,"\n") }
+     ans<-list(gmax,evratio,kkt1,kkt2, phev, ngatend=ngr, nhatend=nHes)
+     names(ans)<-c("gmax","evratio","kkt1","kkt2", "hev", "ngatend", "nhatend")
+     return(ans)
+   } # end nfree > 0
+   else {
      warning("All parameters are constrained")
      ans <- list(gmax=0.0, evratio = NA, kkt1=TRUE, kkt2=TRUE, hev=rep(0,npar), ngatend=ngr, nhatend=nHes)
      # this is the fully constrained case
-  } # end kkt test
+   } # end kkt2 test
 } ## end of kktcchek

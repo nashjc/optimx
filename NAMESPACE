@@ -40,6 +40,7 @@ export(
   "optimr2opm",
   "optimx",
   "optsp",
+  "pd_check",
   "polyopt",
   "proptimr",
   "Rcgmin",

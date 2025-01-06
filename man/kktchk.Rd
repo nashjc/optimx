@@ -2,8 +2,6 @@
 % Part of the R package, http://www.R-project.org
 % Copyright 1995-2007 R Core Development Team
 % Distributed under GPL 2 or later
-
-
 \name{kktchk}
 \alias{kktchk}
 \encoding{UTF-8}
@@ -16,7 +14,7 @@
 }
 \usage{
      kktchk(par, fn, gr, hess=NULL, upper=NULL, lower=NULL, 
-                 maximize=FALSE, control=list(dowarn=TRUE), ...)
+          maximize=FALSE, control=list(dowarn=TRUE), ...)
 }
 \arguments{
  \item{par}{A vector of values for the parameters which are supposedly optimal.}

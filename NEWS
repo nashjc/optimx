@@ -51,6 +51,15 @@ TODOS ideas:
 ===================================================================================
 NEWS from the optimx package
 
+VERSION 2024-12-31
+   o    Change positive-definitive check on Hessian to pd_check(). This is in 
+	routine kktchk which calls pd_check(). Note that we accept the default
+	arguments pivot=TRUE and tol=1.0e-7 for that routine. Do we want to allow
+	users to supply these? 
+   o    Added a new control to ctrldefault() called kkt2chol, default TRUE, which
+	uses a Cholesky decomposition attempt as the test. FALSE uses eigenvalue
+	ratio test. See kktchk() code for details.
+
 VERSION 2024-12-18
    o    Preserve parameter names in optimr()
    o    Warnings about with() in opm.Rd and optimr.Rd
