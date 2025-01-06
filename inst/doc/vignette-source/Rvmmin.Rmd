@@ -14,7 +14,7 @@ bibliography: Extend-optimx.bib
 # Rvmmin description, examples and tests
 
 **Rvmmin** is an all-R version of the Fletcher-Nash variable
-metric nonlinear parameter optimization code of @Fletcher70
+metric nonlinear parameter optimization code of @Fletcher1970
 as modified by @cnm79.
 
 This vignette is intended to show various features of the 
