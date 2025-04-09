@@ -1570,9 +1570,9 @@ optimr <- function(par, fn, gr=NULL, hess=NULL, method=NULL, lower=-Inf, upper=I
       if (savehess) { # compute hessian
          if (is.null(orig.hess)){
            if (is.null(orig.gr) || is.character(orig.gr) ) {
-              hes <- hesf(orig.fn, ans$par, ...) # from numDeriv or pracma??
+              hes <- hesf(fn1, ans$par) # from numDeriv or pracma, fix 20250403 (fn1)
            } else { 
-             hes <- jacf(orig.gr, ans$par, ...) # use Jacobian of gradient
+             hes <- jacf(gr1, ans$par) # use Jacobian of gradient, change to gr1 20250403
              # 20230613: this approach may give asymmetry of matrix
              hes <- 0.5*(hes + t(hes)) # symmetrize
            }

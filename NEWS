@@ -51,6 +51,12 @@ TODOS ideas:
 ===================================================================================
 NEWS from the optimx package
 
+VERSION 2025-04-09
+   o    Calculation of the approximate Hessian failed if there were dot arguments
+        (...) because the calculation did not use fn1() or gr1() that subsumes these
+        arguments into the temporary objective or gradient function. Thanks to 
+        Simon Bonner for spotting this. Now fixed.
+
 VERSION 2024-12-31
    o    Change positive-definitive check on Hessian to pd_check(). This is in 
 	routine kktchk which calls pd_check(). Note that we accept the default
